@@ -211,6 +211,16 @@ const LS={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 };
+/* cache version v3: wipe stale records / cursors written by older buggy builds */
+(function migrate(){
+  try{
+    if(localStorage.getItem('alimovaura_ver')!=='v3'){
+      ['aa.tx.v1','aa.meta.v1','alimovaura_tx_v2','alimovaura_meta_v2'].forEach(k=>localStorage.removeItem(k));
+      localStorage.setItem('alimovaura_ver','v3');
+      try{indexedDB.deleteDatabase('alimovaura')}catch(e){}
+    }
+  }catch(e){}
+})();
 const usd=n=>'$'+Math.round(n).toLocaleString('en-US');
 const usdSigned=n=>(n<0?'−':'+')+usd(Math.abs(n));
 const fmtDate=ts=>{const d=new Date(ts*1000);return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
@@ -230,6 +240,9 @@ const CFG={
 };
 const STABLES=new Set(['USDT','USDC','DAI','FDUSD','TUSD','USDE','PYUSD','USDS','BUSD','USDP','GUSD','LUSD','FRAX']);
 const WRAPPED={WBTC:'BTC',CBBTC:'BTC',TBTC:'BTC',WETH:'ETH',STETH:'ETH',WSTETH:'ETH',CBETH:'ETH',RETH:'ETH'};
+const SMC_ALLOW=new Set(['BTC','WBTC','ETH','WETH','SOL','USDT','USDC','LINK','UNI','AAVE','MKR','ONDO','PEPE']);
+const AI_ALLOW=new Set([...SMC_ALLOW].filter(x=>!STABLES.has(x)));
+const ALIAS={WBTC:'BTC',WETH:'ETH'};
 const COINS=[
   {s:'BTC',id:'bitcoin',c:'#F7931A',g:'₿'},{s:'ETH',id:'ethereum',c:'#627EEA',g:'Ξ'},
   {s:'SOL',id:'solana',c:'#9945FF',g:'SOL'},{s:'BNB',id:'binancecoin',c:'#E0A800',g:'BNB'},
@@ -346,15 +359,23 @@ const DEFAULT_WALLETS=[
   {id:'gs-ethe',label:'Grayscale (ETHE)',addr:'0x628ff693426583D9a7FB391E54366292F509D457',chain:'ETH',type:'inst',builtin:true},
   {id:'br-ibit',label:'BlackRock (IBIT)',addr:'bc1q4c8n5t00jmj8temxdgcc3t32nkg2wjwz24lywv',chain:'BTC',type:'inst',builtin:true},
   mkSlot('fidelity','Fidelity'), mkSlot('strategy','Strategy (MicroStrategy)'),
-  mkSlot('wintermute','Wintermute'), mkSlot('jump','Jump Trading'),
+  mkSlot('wintermute','Wintermute'), {id:'jump',label:'Jump Trading',addr:'0xf584F8728B874a6a5c7A8d4d387C9aae9172D621',chain:'ETH',type:'inst',builtin:true,unv:true},
   {id:'smc-vitalik',label:'Vitalik Buterin',addr:'0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',chain:'ETH',type:'smc',builtin:true},
-  {id:'ex-bin14',label:'Binance 14',addr:'0x28C6c06298d514Db089934071355E5743bf21d60',chain:'ETH',type:'exch',group:'binance',builtin:true},
-  {id:'ex-bin8',label:'Binance 8',addr:'0xF977814e90dA44bFA03b6295A0616a897441aceC',chain:'ETH',type:'exch',group:'binance',builtin:true},
-  {id:'ex-binbtc',label:'Binance BTC',addr:'34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo',chain:'BTC',type:'exch',group:'binance',builtin:true}
+
 ];
+function loadWallets(){
+  const saved=LS.get('aa.wallets.v1',null);
+  if(!saved) return DEFAULT_WALLETS.map(w=>({...w}));
+  const list=saved.filter(w=>!(w.type==='exch'&&w.builtin));          /* remove exchange hot-wallet probes */
+  for(const d of DEFAULT_WALLETS){
+    const x=list.find(w=>w.id===d.id);
+    if(x&&!x.addr&&d.addr){x.addr=d.addr;x.chain=d.chain;x.slot=false;x.unv=d.unv}
+  }
+  return list;
+}
 const S={
-  wallets:LS.get('aa.wallets.v1',null)||DEFAULT_WALLETS,
-  meta:LS.get('aa.meta.v1',{}),
+  wallets:loadWallets(),
+  meta:LS.get('alimovaura_meta_v3',{}),
   txs:new Map(), prices:LS.get('aa.prices',{}), hist:{}, histP:{}, fresh:new Map(), attempted:new Set(), radarTried:false, radar:{ok:0,err:null,last:0},
   busy:false, lastCycle:0, loaded:false, firstDone:false, speaking:null, aiText:{inst:'',smc:''},
   view:{inst:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'},smc:{limit:100,period:'all',open:false,side:'all',q:''}}
@@ -364,14 +385,14 @@ const PANELS={
   smc:{types:['smc','exch'],key:'panelSmc',sub:'panelSmcSub',who:'colWho'}
 };
 const saveWallets=()=>LS.set('aa.wallets.v1',S.wallets);
-const saveMeta=()=>LS.set('aa.meta.v1',S.meta);
+const saveMeta=()=>LS.set('alimovaura_meta_v3',S.meta);
 const meta=id=>S.meta[id]||(S.meta[id]={});
 const grp=w=>(w.group||baseName(w.label)).toLowerCase();
 const sameGroup=w=>S.wallets.filter(x=>x.id!==w.id&&x.addr&&x.chain===w.chain&&grp(x)===grp(w)).map(x=>norm(x.addr));
 
 /* ================= storage (IndexedDB with localStorage fallback) ================= */
 const DB=(()=>{
-  const K='aa.tx.v1', CAP=8000;
+  const K='alimovaura_tx_v3', CAP=8000;
   const open=async()=>true;
   const all=async()=>LS.get(K,[]);
   const put=async arr=>{
@@ -628,7 +649,7 @@ async function fetchEth(w,mode){
   if(fails===kinds.length) throw res.err||new Error('fetch failed');
   return res;
 }
-const passIngest=(w,r)=>w.type==='inst'?r.usd>=CFG.MIN_INST:(r.usd>=CFG.SMC_MIN&&r.usd<=CFG.SMC_MAX);
+const passIngest=(w,r)=>SMC_ALLOW.has(r.sym)&&(w.type==='inst'?r.usd>=CFG.MIN_INST:(r.usd>=CFG.SMC_MIN&&r.usd<=CFG.SMC_MAX));
 async function syncWallet(w,mode){
   const m=meta(w.id);
   await Promise.all([loadHist('BTC'),loadHist('ETH')]);
@@ -712,14 +733,17 @@ async function loadOlder(){
 
 /* ================= SMC whale radar ($1M–$50M, Blockscout) ================= */
 const RADAR_TOKENS=[['USDT','0xdAC17F958D2ee523a2206206994597C13D831ec7',6],['USDC','0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',6],['WETH','0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',18],
-  ['WBTC','0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',8],['LINK','0x514910771AF9Ca656af840dff83E8264EcF986CA',18],['UNI','0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',18],['AAVE','0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',18]];
+  ['WBTC','0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',8],['LINK','0x514910771AF9Ca656af840dff83E8264EcF986CA',18],['UNI','0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',18],['AAVE','0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',18],
+  ['MKR','0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',18],['ONDO','0xfAbA6f8e4a5E8Ab82F62fe7C39859FA577269BE3',18],['PEPE','0x6982508145454Ce325dDbE47a25d4ec3d2311933',18]];
+const EXCH_ADDR=new Set(['0x28c6c06298d514db089934071355e5743bf21d60','0xf977814e90da44bfa03b6295a0616a897441acec']);   /* Binance 14 / 8 hot wallets */
 const EXCH_RE=/binance|coinbase|kraken|okx|okex|bitfinex|bybit|kucoin|huobi|\bhtx\b|gemini|bitstamp|crypto\.com|gate\.io|bitget|upbit|bithumb|robinhood|mexc|bitmex|deribit|poloniex|bittrex/i;
 const DEX_RE=/uniswap|sushi|curve|1inch|balancer|pancake|paraswap|cow protocol|cowswap|matcha|kyber|dodo|maverick|aggregat|swap|router|pool|pair/i;
 const addrLabel=a=>a?[a.name,a.ens_domain_name,a.implementation_name,...((a.metadata&&a.metadata.tags)||[]).map(x=>x&&x.name),...((a.public_tags||[]).map(x=>x&&(x.label||x.display_name)))].filter(Boolean).join(' '):'';
 /* direction: exchange -> wallet = BUY, wallet -> exchange = SELL; EOA <-> DEX contract: receives token = BUY, sends token = SELL */
 function classify(from,to){
   if(!from||!to||!from.hash||!to.hash) return null;
-  const fl=addrLabel(from), tl=addrLabel(to), fe=EXCH_RE.test(fl), te=EXCH_RE.test(tl);
+  const fl=addrLabel(from), tl=addrLabel(to);
+  const fe=EXCH_RE.test(fl)||EXCH_ADDR.has(norm(from.hash)), te=EXCH_RE.test(tl)||EXCH_ADDR.has(norm(to.hash));   /* exchange<->exchange (internal hot-wallet moves) => no match => dropped */
   if(fe&&!te) return {whale:to,side:'buy',via:fl};
   if(te&&!fe) return {whale:from,side:'sell',via:tl};
   if(!fe&&!te){
@@ -739,8 +763,11 @@ function parseRadar(job,it){
     sym='ETH'; amt=Number(wei)/1e18; price=pr.p; est=pr.est; hash=it.hash; key='';
   }else{
     const tok=it.token||{}; if(tok.type&&tok.type!=='ERC-20') return null;
-    const known=RADAR_TOKENS.find(k=>k[0]===job.fb);
-    sym=String(tok.symbol||(known&&known[0])||'').toUpperCase().slice(0,8); if(!sym) return null;
+    sym=String(tok.symbol||job.fb||'').toUpperCase().slice(0,8);
+    const known=RADAR_TOKENS.find(k=>k[0]===(job.fb||sym)); if(!known||!SMC_ALLOW.has(known[0])) return null;   /* liquid majors only */
+    const ta=String(tok.address_hash||tok.address||'').toLowerCase();
+    if(job.fb?(ta&&ta!==known[1].toLowerCase()):(ta!==known[1].toLowerCase())) return null;                      /* reject spoofed symbols */
+    sym=known[0];
     const tot=it.total||{}; let raw; try{raw=BigInt(tot.value||'0')}catch(e){return null}
     const dec=parseInt(tot.decimals??tok.decimals??(known&&known[2])??18,10);
     amt=Number(raw)/Math.pow(10,dec); if(!(amt>0)) return null;
@@ -851,7 +878,7 @@ function windowSignals(list){
   });
 }
 function analyze(list){
-  const real=list.filter(x=>!STABLES.has(x.sym));
+  const real=list.filter(x=>AI_ALLOW.has(x.sym)).map(x=>({...x,sym:ALIAS[x.sym]||x.sym}));
   const st=streakSignals(real), used=new Set(st.slice(0,2).map(s=>s.sym));
   const ws=windowSignals(real);
   const rest=ws.filter(s=>!used.has(s.sym)).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net));
@@ -880,6 +907,7 @@ function visible(panel){
   const nowS=Date.now()/1000, byId=new Map(S.wallets.map(w=>[w.id,w]));
   const out=[];
   for(const x of S.txs.values()){
+    if(!SMC_ALLOW.has(x.sym)) continue;
     if(x.w==='radar'){
       if(panel!=='smc'||x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue;
       x.who=x.lab||shortAddr(x.cp); x.via=x.via0||''; x.pk=panel; x.co='SMC'; x.verified=false; out.push(x); continue;
@@ -887,11 +915,13 @@ function visible(panel){
     const w=byId.get(x.w); if(!w||!w.addr||norm(w.addr)!==x.a||!P.types.includes(w.type)) continue;
     if(panel==='inst'){ if(x.usd<CFG.MIN_INST) continue; }
     else if(x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue;
-    x.who=whoOf(x); x.via=w.type==='exch'?w.label:''; x.pk=panel; x.co=baseName(w.label); x.verified=!!(w.builtin&&!w.slot);
+    x.who=whoOf(x); x.via=w.type==='exch'?w.label:''; x.pk=panel; x.co=baseName(w.label); x.verified=!!(w.builtin&&!w.slot&&!w.unv);
     out.push(x);
   }
-  out.sort((a,b)=>b.ts-a.ts);
-  return {all:out,period:cut?out.filter(x=>nowS-x.ts<=cut):out};
+  out.sort((a,b)=>b.ts-a.ts||(a.id<b.id?1:-1));       /* strictly newest first */
+  const seen=new Set(), ded=[];
+  for(const x of out){const key=x.w+'|'+x.hash+'|'+x.sym+'|'+x.side+'|'+Math.round(x.usd/1000);if(seen.has(key))continue;seen.add(key);ded.push(x)}
+  return {all:ded,period:cut?ded.filter(x=>nowS-x.ts<=cut):ded};
 }
 let raf=0; const render=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;doRender()})};
 function doRender(){
@@ -962,7 +992,7 @@ function renderPanel(k,vis){
       return `<tr class="${S.fresh.has(x.id)?'flash':''}"><td><b>${esc(x.who)}</b>${x.verified&&k==='inst'?VERIFIED:''}${sub}</td>
 <td><span class="cc">${coinIcon(x.sym)}${esc(x.sym)}</span></td>
 <td><span class="pill ${buy?'buy':'sell'}">${esc(t(buy?'buy':'sell'))}</span></td>
-<td class="num ${buy?'up':'down'}">${x.est?`<span title="${esc(t('est'))}">≈</span>`:''}${usd(x.usd)}</td>
+<td class="num ${buy?'up':'down'}"${x.est?` title="${esc(t('est'))}"`:''}>${usd(x.usd)}</td>
 <td>${fmtDate(x.ts)}</td>
 <td><a href="${mkUrl(x.chain,esc(x.hash))}" target="_blank" rel="noopener noreferrer">Tx ↗</a></td></tr>`;
     }).join('');
@@ -1112,7 +1142,7 @@ function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('sh
 
 /* ================= boot ================= */
 (async function init(){
-  buildShell(); applyI18n(); renderTicker(); doRender();
+  saveWallets(); buildShell(); applyI18n(); renderTicker(); doRender();
   if('speechSynthesis' in window) try{speechSynthesis.getVoices()}catch(e){}
   await DB.open();
   const saved=await DB.all(); saved.forEach(x=>S.txs.set(x.id,x));
