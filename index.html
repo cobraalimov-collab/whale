@@ -146,6 +146,8 @@ td:first-child b{display:inline-block;max-width:170px;overflow:hidden;text-overf
 @keyframes fl{0%{background:#F6E7A8}100%{background:transparent}}
 .empty{flex:1;display:none;align-items:center;justify-content:center;padding:30px 18px;text-align:center;color:var(--mut);background:#fff;font-weight:600}
 .foot{background:#fff;min-width:0}
+.al{color:inherit;text-decoration:none;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}.al:hover{color:#B8860B;text-decoration:underline}
+.cp{border:0;background:none;color:#94A3B8;cursor:pointer;margin-left:6px;font-size:13px;padding:0 2px}.cp:hover{color:#B8860B}
 .more{display:block;width:calc(100% - 36px);margin:10px 18px}
 
 /* wallets */
@@ -251,7 +253,7 @@ const usdCS=n=>(n<0?'−':'+')+usdC(n);
 const usdSigned=n=>(n<0?'−':'+')+usd(Math.abs(n));
 const fmtDate=ts=>{const d=new Date(ts*1000);return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 const hhmmss=ms=>{const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`};
-const shortAddr=a=>a?(a.length>14?a.slice(0,6)+'…'+a.slice(-4):a):'—';
+const shortAddr=a=>a?(a.length>14?a.slice(0,6)+'...'+a.slice(-4):a):'—';
 const fmtPrice=p=>p>=1000?p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):p>=1?p.toLocaleString('en-US',{maximumFractionDigits:4}):p.toLocaleString('en-US',{maximumFractionDigits:6});
 const dayKeyUTC=sec=>new Date(sec*1000).toISOString().slice(0,10);
 const dayKeyLocal=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -283,7 +285,7 @@ uz:{
   tagline:"Institutsional va Smart Money kripto tahlil terminali",
   addWallet:"+ Hamyon qo'shish", older:"Eski tarixni yuklash",
   panelInst:"INSTITUTSIONAL KITLAR", panelInstSub:"Gigantlar harakati ($1M–$50M): BlackRock, Grayscale va boshqalar",
-  panelSmc:"SMART MONEY KITLAR (SMC)", panelSmcSub:"Top 30 ta eng faol Smart Money hamyonlarining jonli harakatlari",
+  panelSmc:"SMART MONEY KITLAR (SMC)", panelSmcSub:"Eng yirik DEX savdolari (≥ $25K) — Smart Money hamyonlarining jonli harakatlari",
   colCompany:"Kompaniya", colWho:"Kit / Hamyon", colCoin:"Kripto", colAction:"Harakat", colAmount:"Summa (USD)", colDate:"Sana va soat", colProof:"Isbot",
   buy:"SOTIB OLDI", sell:"SOTDI", bought:"Jami sotib olingan", sold:"Jami sotilgan", net:"Sof pul oqimi",
   pAll:"Hammasi", p24:"24 soat", p7:"7 kun", p30:"30 kun",
@@ -308,15 +310,15 @@ uz:{
   aiWinBull:"Oxirgi {k} ta yirik harakat ({range}) bo'yicha {actors} {coin} ga jami {usd} pul kirityapti (xarid ulushi {sh}%). Talab kuchli — narx taxminan {p}% ehtimol bilan yuqoriga ko'tariladi.",
   aiWinBear:"Oxirgi {k} ta yirik harakat ({range}) bo'yicha {actors} {coin} dan jami {usd} pulini chiqarib olyapti (sotuv bosimi {sh}%). Sotuv bosimi kuchli — narx taxminan {p}% ehtimol bilan pastga tushadi.",
   aiFlat:"{coin} bo'yicha oxirgi {k} ta harakatda xarid va sotuv deyarli teng (xarid {b}%, sotuv {s}%). Aniq yo'nalish yo'q — narx taxminan {p}% ehtimol bilan yon harakatda qoladi.",
-  netWin:"So'nggi harakatlar sof oqimi", radarName:"Faol hamyonlar radari (Blockscout)",
+  netWin:"So'nggi harakatlar sof oqimi", radarName:"DEX savdolari (GeckoTerminal)", copy:"Nusxalash", copied:"Hamyon manzili nusxalandi",
   collapse:"Yig'ish / ochish", liveHint:"Yangi tranzaksiyalar shu yerda jonli ko'rinadi…",
-  footer:"Ma'lumot manbalari: mempool.space, eth.blockscout.com, OKX, Binance, CoinGecko — hammasi bepul va kalitsiz. Barcha yozuvlar brauzeringizda saqlanadi."
+  footer:"Ma'lumot manbalari: mempool.space, eth.blockscout.com, GeckoTerminal, OKX, Binance, CoinGecko — hammasi bepul va kalitsiz. Barcha yozuvlar brauzeringizda saqlanadi."
 },
 ru:{
   tagline:"Терминал аналитики институциональных и Smart Money криптопотоков",
   addWallet:"+ Добавить кошелёк", older:"Загрузить старую историю",
   panelInst:"ИНСТИТУЦИОНАЛЬНЫЕ КИТЫ", panelInstSub:"Движения гигантов ($1M–$50M): BlackRock, Grayscale и другие",
-  panelSmc:"SMART MONEY КИТЫ (SMC)", panelSmcSub:"Живые движения 30 самых активных кошельков Smart Money",
+  panelSmc:"SMART MONEY КИТЫ (SMC)", panelSmcSub:"Крупнейшие сделки на DEX (≥ $25K) — живые движения кошельков Smart Money",
   colCompany:"Компания", colWho:"Кит / Кошелёк", colCoin:"Крипто", colAction:"Действие", colAmount:"Сумма (USD)", colDate:"Дата и время", colProof:"Proof",
   buy:"КУПИЛ", sell:"ПРОДАЛ", bought:"Всего куплено", sold:"Всего продано", net:"Чистый денежный поток",
   pAll:"Всё время", p24:"24 часа", p7:"7 дней", p30:"30 дней",
@@ -341,15 +343,15 @@ ru:{
   aiWinBull:"По последним {k} крупным операциям ({range}) {actors} направляют в {coin} в общей сложности {usd} (доля покупок {sh}%). Спрос сильный — цена вырастет с вероятностью около {p}%.",
   aiWinBear:"По последним {k} крупным операциям ({range}) {actors} выводят из {coin} в общей сложности {usd} (давление продавцов {sh}%). Давление продавцов сильное — цена снизится с вероятностью около {p}%.",
   aiFlat:"По {coin} в последних {k} операциях покупки и продажи почти равны (покупки {b}%, продажи {s}%). Чёткого направления нет — цена останется в боковике с вероятностью около {p}%.",
-  netWin:"Чистый поток последних операций", radarName:"Радар активных кошельков (Blockscout)",
+  netWin:"Чистый поток последних операций", radarName:"Сделки DEX (GeckoTerminal)", copy:"Копировать", copied:"Адрес кошелька скопирован",
   collapse:"Свернуть / развернуть", liveHint:"Новые транзакции появятся здесь в реальном времени…",
-  footer:"Источники данных: mempool.space, eth.blockscout.com, OKX, CoinGecko — всё бесплатно и без ключей. Все записи хранятся в вашем браузере."
+  footer:"Источники данных: mempool.space, eth.blockscout.com, GeckoTerminal, OKX, CoinGecko — всё бесплатно и без ключей. Все записи хранятся в вашем браузере."
 },
 en:{
   tagline:"Institutional & Smart Money crypto analytics terminal",
   addWallet:"+ Add wallet", older:"Load older history",
   panelInst:"INSTITUTIONAL WHALES", panelInstSub:"Giants' moves ($1M–$50M): BlackRock, Grayscale and more",
-  panelSmc:"SMART MONEY WHALES (SMC)", panelSmcSub:"Live moves of the 30 most active Smart Money wallets",
+  panelSmc:"SMART MONEY WHALES (SMC)", panelSmcSub:"Largest DEX trades (≥ $25K) — live Smart Money wallet moves",
   colCompany:"Company", colWho:"Whale / Wallet", colCoin:"Crypto", colAction:"Action", colAmount:"Amount (USD)", colDate:"Date & time", colProof:"Proof",
   buy:"BOUGHT", sell:"SOLD", bought:"Total bought", sold:"Total sold", net:"Net cash flow",
   pAll:"All time", p24:"24 hours", p7:"7 days", p30:"30 days",
@@ -374,9 +376,9 @@ en:{
   aiWinBull:"Across the latest {k} large moves ({range}), {actors} have put {usd} in total into {coin} (buy share {sh}%). Demand is strong — price is likely to rise, with roughly {p}% probability.",
   aiWinBear:"Across the latest {k} large moves ({range}), {actors} have withdrawn {usd} in total from {coin} (selling pressure {sh}%). Selling pressure is strong — price is likely to fall, with roughly {p}% probability.",
   aiFlat:"For {coin}, buying and selling are almost even across the last {k} moves (buy {b}%, sell {s}%). No clear direction — price likely stays range-bound, roughly {p}% probability.",
-  netWin:"Net flow of latest moves", radarName:"Active-wallet radar (Blockscout)",
+  netWin:"Net flow of latest moves", radarName:"DEX trades (GeckoTerminal)", copy:"Copy", copied:"Wallet address copied",
   collapse:"Collapse / expand", liveHint:"New transactions appear here live…",
-  footer:"Data sources: mempool.space, eth.blockscout.com, OKX, CoinGecko — all free and keyless. All records are stored in your browser."
+  footer:"Data sources: mempool.space, eth.blockscout.com, GeckoTerminal, OKX, CoinGecko — all free and keyless. All records are stored in your browser."
 }};
 let lang=LS.get('aa.lang','uz'); if(!I[lang]) lang='uz';
 const t=(k,v)=>{let s=(I[lang][k]??I.uz[k]??k);if(v)for(const x in v)s=s.replace('{'+x+'}',v[x]);return s};
@@ -389,13 +391,12 @@ const DEFAULT_WALLETS=[
   {id:'br-ibit',label:'BlackRock (IBIT)',addr:'bc1q4c8n5t00jmj8temxdgcc3t32nkg2wjwz24lywv',chain:'BTC',type:'inst',builtin:true},
   mkSlot('fidelity','Fidelity'), mkSlot('strategy','Strategy (MicroStrategy)'),
   mkSlot('wintermute','Wintermute'), {id:'jump',label:'Jump Trading',addr:'0xf584F8728B874a6a5c7A8d4d387C9aae9172D621',chain:'ETH',type:'inst',builtin:true,unv:true},
-  {id:'smc-vitalik',label:'Vitalik Buterin',addr:'0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',chain:'ETH',type:'smc',builtin:true},
 
 ];
 function loadWallets(){
   const saved=LS.get('aa.wallets.v1',null);
   if(!saved) return DEFAULT_WALLETS.map(w=>({...w}));
-  const list=saved.filter(w=>!(w.type==='exch'&&w.builtin));          /* remove exchange hot-wallet probes */
+  const list=saved.filter(w=>!(w.type==='exch'&&w.builtin)&&!w.auto&&w.id!=='smc-vitalik');          /* remove exchange hot-wallet probes */
   for(const d of DEFAULT_WALLETS){
     const x=list.find(w=>w.id===d.id);
     if(x&&!x.addr&&d.addr){x.addr=d.addr;x.chain=d.chain;x.slot=false;x.unv=d.unv}
@@ -405,9 +406,9 @@ function loadWallets(){
 const S={
   wallets:loadWallets(),
   meta:LS.get('alimovaura_meta_v3',{}),
-  txs:new Map(), prices:LS.get('aa.prices',{}), hist:{}, histP:{}, fresh:new Map(), attempted:new Set(), radarTried:LS.get('aa.wallets.v1',[]).some(w=>w.auto), radar:{ok:0,err:null,last:0},
+  txs:new Map(), prices:LS.get('aa.prices',{}), hist:{}, histP:{}, fresh:new Map(), attempted:new Set(), gt:{pools:[],pt:0,rows:new Map(),cur:0,pause:0,ok:0,err:null,last:0,tried:false},
   busy:false, lastCycle:0, loaded:false, firstDone:false, speaking:null, aiText:{inst:'',smc:''}, aiOpen:LS.get('aa.aiOpen',true),
-  view:{inst:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'},smc:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'}}
+  view:{inst:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'},smc:{limit:50,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'}}
 };
 const PANELS={
   inst:{types:['inst'],key:'panelInst',sub:'panelInstSub',who:'colCompany'},
@@ -538,7 +539,8 @@ function priceAt(sym,ts){
 }
 
 /* ================= parsers ================= */
-const mkUrl=(chain,hash)=>chain==='BTC'?`https://mempool.space/tx/${hash}`:`https://etherscan.io/tx/${hash}`;
+const mkUrl=(chain,hash)=>chain==='BTC'?`https://mempool.space/tx/${hash}`:chain==='SOL'?`https://solscan.io/tx/${hash}`:chain==='ARB'?`https://arbiscan.io/tx/${hash}`:`https://etherscan.io/tx/${hash}`;
+const mkAddr=(chain,a)=>chain==='SOL'?`https://solscan.io/account/${a}`:chain==='ARB'?`https://arbiscan.io/address/${a}`:`https://etherscan.io/address/${a}`;
 function mkRec(w,o){
   return {id:o.id,w:w.id,a:norm(w.addr),chain:w.chain,sym:o.sym,side:o.side,amt:o.amt,usd:o.usd,ts:o.ts,hash:o.hash,cp:o.cp||null,est:!!o.est,liq:o.liq?1:0,via0:o.via0||''};
 }
@@ -756,7 +758,6 @@ async function syncCycle(){
   try{
     if(!S.prices.BTC||!S.prices.ETH) await loadPrices();
     /* all tracked wallets + whale radar fetched concurrently (3 at a time, per-host throttled) */
-    if(discDue()) await syncRadar();
     await pool(active().map(w=>()=>syncOneWallet(w)),3);
   }catch(e){}
   S.busy=false; S.lastCycle=Date.now(); S.firstDone=true; saveMeta(); render(); paintStatus();
@@ -808,72 +809,85 @@ function tokenUsd(it,fb){
   if(STABLES.has(sym)) price=1; else if(WRAPPED[sym]){const pr=priceAt(WRAPPED[sym],ts);price=pr?pr.p:0} else if(+tok.exchange_rate>0) price=+tok.exchange_rate;
   return amt*price;
 }
-const discDue=()=>!S.meta.discLast||Date.now()-S.meta.discLast>CFG.DISC_EVERY_MS;
-/* rank real on-chain traders (EOAs swapping on DEXs / moving liquid tokens) by recent traded volume -> top 30 watchlist */
-async function syncRadar(){
-  await Promise.all([loadHist('ETH'),loadHist('BTC')]);
-  const B='https://eth.blockscout.com/api/v2', agg=new Map();
-  const okTrader=a=>a&&a.hash&&!a.is_contract&&!EXCH_RE.test(addrLabel(a))&&!EXCH_ADDR.has(norm(a.hash));
-  const bump=(a,usdv)=>{const k=a.hash.toLowerCase(),e=agg.get(k)||{n:0,usd:0,lab:''};e.n++;e.usd+=usdv;if(!e.lab)e.lab=(a.ens_domain_name||a.name||'').slice(0,28);agg.set(k,e)};
-  const jobs=[
-    ...RADAR_TOKENS.map(([sym,addr])=>({url:`${B}/tokens/${addr}/transfers`,kind:'tok',fb:sym})),
-    {url:`${B}/token-transfers?type=ERC-20`,kind:'tok'},
-    ...ROUTERS.map(([a])=>({url:`${B}/addresses/${a}/transactions`,kind:'router'}))
-  ];
-  let ok=0;
-  await pool(jobs.map(job=>async()=>{
-    try{
-      let np=null;
-      for(let p=0;p<3;p++){
-        const q=new URLSearchParams(); if(np) for(const [k,v] of Object.entries(np)) if(v!=null) q.set(k,v);
-        const qs=q.toString(), d=await jget(job.url+(qs?(job.url.includes('?')?'&':'?')+qs:''));
-        for(const it of d.items||[]){
-          if(job.kind==='tok'){
-            const f=it.from,t2=it.to; if(!f||!t2) continue;
-            const tr=(!f.is_contract&&t2.is_contract)?f:((!t2.is_contract&&f.is_contract)?t2:null);
-            if(okTrader(tr)) bump(tr,tokenUsd(it,job.fb));
-          }else if(okTrader(it.from)){
-            let wei=0n; try{wei=BigInt(it.value||'0')}catch(e){}
-            bump(it.from,(S.prices.ETH?Number(wei)/1e18*S.prices.ETH.p:0));
-          }
-        }
-        np=d.next_page_params||null; if(!np) break;
-      }
-      ok++;
-    }catch(e){S.radar.err=e.message||String(e)}
-  }),3);
-  if(ok){
-    const disc=S.meta.disc||(S.meta.disc={});
-    for(const k in disc){disc[k].n*=0.85;disc[k].usd*=0.85}
-    for(const [k,e] of agg){const d=disc[k]||(disc[k]={n:0,usd:0,lab:''});d.n+=e.n;d.usd+=e.usd;if(e.lab)d.lab=e.lab}
-    const ranked=Object.entries(disc).filter(([,d])=>d.n>=2).sort((a,b)=>(b[1].usd-a[1].usd)||(b[1].n-a[1].n));
-    for(const [k] of Object.entries(disc).filter(x=>!ranked.slice(0,150).some(r=>r[0]===x[0]))) delete disc[k];
-    const rank=new Map(ranked.map(([k],i)=>[k,i]));
-    const manual=S.wallets.filter(w=>!w.auto), taken=new Set(manual.map(w=>norm(w.addr)).filter(Boolean).map(a=>a.toLowerCase()));
-    const cur=S.wallets.filter(w=>w.auto);
-    const keep=cur.filter(w=>(rank.get(w.addr.toLowerCase())??999)<CFG.SMC_TOP+15);     /* hysteresis: avoid flapping */
-    const keepSet=new Set(keep.map(w=>w.addr.toLowerCase())), add=[];
-    for(const [k,d] of ranked){
-      if(keep.length+add.length>=CFG.SMC_TOP) break;
-      if(keepSet.has(k)||taken.has(k)) continue;
-      add.push({id:'a_'+k.slice(2,12),label:d.lab||shortAddr(k),addr:k,chain:'ETH',type:'smc',auto:true});
-    }
-    for(const w of cur) if(!keep.includes(w)) delete S.meta[w.id];
-    S.wallets=[...manual,...keep,...add];
-    saveWallets(); S.meta.discLast=Date.now();
-    S.radar.ok=ok; S.radar.err=null; S.radar.last=Date.now(); S.lastLive=Date.now();
-  }
-  S.radarTried=true; saveMeta(); render();
-}
-const ready=k=>S.loaded&&(k==='smc'?S.radarTried:true)&&S.wallets.filter(w=>w.addr&&w.chain&&PANELS[k].types.includes(w.type)).every(w=>S.attempted.has(w.id));
+const ready=k=>S.loaded&&(k==='smc'?(S.gt.tried||S.gt.rows.size>0):true)&&S.wallets.filter(w=>w.addr&&w.chain&&PANELS[k].types.includes(w.type)).every(w=>S.attempted.has(w.id));
 function radarRow(){
-  const r=S.radar; let st;
+  const r=S.gt; let st;
   if(r.err&&!r.last) st=`<span class="st err" title="${esc(r.err)}">${esc(t('err'))}</span>`;
   else if(r.last) st=`<span class="st ok">${hhmmss(r.last)}</span>`;
   else st=`<span class="st idle">${esc(t('syncing'))}</span>`;
-  return `<div class="wr"><span class="n">${esc(t('radarName'))}</span>${st}</div>`;
+  return `<div class="wr"><span class="n">${esc(t('radarName'))}</span><span class="ad">${S.gt.pools.length} pools</span>${st}</div>`;
 }
-
+/* ================= SMC feed: GeckoTerminal public API (keyless, CORS-friendly) ================= */
+const GT='https://api.geckoterminal.com/api/v2', GT_KEY='alimovaura_gt_v1', GT_MIN=25000;
+const GT_QUERIES=[['eth','WETH USDT'],['eth','WBTC USDT'],['eth','LINK WETH'],['eth','UNI WETH'],['eth','AAVE WETH'],['eth','PEPE WETH'],['solana','SOL USDC'],['solana','SOL USDT'],['arbitrum','WETH USDC'],['arbitrum','WBTC WETH']];
+const GT_CHAIN={eth:'ETH',solana:'SOL',arbitrum:'ARB'};
+const GT_ALIAS={WETH:'ETH',WBTC:'BTC',CBBTC:'BTC',WSOL:'SOL',TBTC:'BTC'};
+const gtSym=x=>{x=String(x||'').toUpperCase().trim();return GT_ALIAS[x]||x};
+async function gtGet(url){
+  let r;
+  try{
+    const c=new AbortController(), to=setTimeout(()=>c.abort(),9000);
+    r=await fetch(url,{headers:{Accept:'application/json;version=20230302'},signal:c.signal}); clearTimeout(to);
+  }catch(e){ return jget(url) }           /* network/CORS problem -> proxy fallback */
+  if(r.status===429){const e=new Error('429');e.rl=true;throw e}
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+function gtSave(){
+  const rows=[...S.gt.rows.values()].sort((a,b)=>b.ts-a.ts).slice(0,300);
+  LS.set(GT_KEY,{pools:S.gt.pools,pt:S.gt.pt,rows});
+}
+function gtLoad(){
+  const c=LS.get(GT_KEY,null); if(!c) return;
+  S.gt.pools=c.pools||[]; S.gt.pt=c.pt||0;
+  const minTs=Date.now()/1000-CFG.MAX_AGE_DAYS*86400;
+  for(const x of c.rows||[]) if(x&&x.hash&&x.ts>minTs&&x.ts<Date.now()/1000+600) S.gt.rows.set(x.id,x);
+}
+async function gtDiscover(){
+  const res=await Promise.allSettled(GT_QUERIES.map(([n,q])=>gtGet(`${GT}/search/pools?query=${encodeURIComponent(q)}&network=${n}&page=1`).then(d=>({n,q,d}))));
+  const pools=[], seen=new Set();
+  for(const r of res){
+    if(r.status!=='fulfilled') continue;
+    const {n,d}=r.value;
+    const list=(d.data||[]).filter(p=>p.attributes&&(p.relationships.network.data.id===n)).sort((a,b)=>(+b.attributes.reserve_in_usd||0)-(+a.attributes.reserve_in_usd||0));
+    const p=list[0]; if(!p) continue;
+    const addr=p.attributes.address, parts=String(p.attributes.name||'').split('/').map(x=>x.replace(/\s+\d.*$/,'').trim());
+    if(parts.length<2||seen.has(n+addr)) continue; seen.add(n+addr);
+    pools.push({n,addr,base:parts[0],quote:parts[1]});
+  }
+  if(pools.length){S.gt.pools=pools;S.gt.pt=Date.now();gtSave()}
+}
+function gtParse(pool,it){
+  const a=it.attributes||{}; if(!a.tx_hash||!a.tx_from_address) return null;
+  const usdv=+a.volume_in_usd; if(!(usdv>=GT_MIN)) return null;
+  const ts=Math.floor(Date.parse(a.block_timestamp)/1000); if(!(ts>0)) return null;
+  let sym=gtSym(pool.base), side=a.kind==='buy'?'buy':a.kind==='sell'?'sell':null; if(!side) return null;
+  if(STABLES.has(sym)){sym=gtSym(pool.quote);side=side==='buy'?'sell':'buy'}     /* stable is the base: flip to the traded asset */
+  if(!SMC_ALLOW.has(sym)&&!SMC_ALLOW.has(pool.base)) { if(STABLES.has(sym)) return null }
+  return {id:'gt:'+pool.n+':'+a.tx_hash+':'+a.tx_from_address.slice(-6),w:'gt',a:'',sym,side,usd:usdv,ts,hash:a.tx_hash,chain:GT_CHAIN[pool.n]||'ETH',
+    addr:a.tx_from_address,cp:'',liq:true,via0:pool.base+'/'+pool.quote};
+}
+async function geckoTick(first){
+  const g=S.gt; if(Date.now()<g.pause) return;
+  try{
+    if(!g.pools.length||Date.now()-g.pt>3600000) await gtDiscover();
+    if(!g.pools.length) throw new Error(g.err||'no pools');
+    const take=first?6:5, batch=[]; for(let i=0;i<Math.min(take,g.pools.length);i++) batch.push(g.pools[(g.cur+i)%g.pools.length]);
+    g.cur=(g.cur+take)%g.pools.length;
+    const res=await Promise.allSettled(batch.map(pl=>gtGet(`${GT}/networks/${pl.n}/pools/${pl.addr}/trades?trade_volume_in_usd_greater_than=${GT_MIN}`).then(d=>({pl,d}))));
+    let ok=0,added=0;
+    for(const r of res){
+      if(r.status==='rejected'){ if(r.reason&&r.reason.rl) g.pause=Date.now()+30000; g.err=r.reason&&r.reason.message; continue }
+      ok++;
+      for(const it of r.value.d.data||[]){
+        const x=gtParse(r.value.pl,it); if(!x||g.rows.has(x.id)) continue;
+        g.rows.set(x.id,x); added++; if(g.last) S.fresh.set(x.id,Date.now());
+      }
+    }
+    if(ok){g.err=null;g.last=Date.now();S.lastLive=Date.now();gtSave()}
+  }catch(e){ if(e&&e.rl) g.pause=Date.now()+30000; g.err=e.message||String(e) }
+  g.tried=true; render(); paintStatus();
+}
 /* ================= AI trend analysis (both panels combined) ================= */
 const SMCK='\u0000smc', CLUSTER_H=24, CLUSTER_MIN=3;
 const fmtDay=ts=>{const x=new Date(ts*1000);return `${pad(x.getDate())}.${pad(x.getMonth()+1)}.${x.getFullYear()}`};
@@ -955,12 +969,16 @@ function visible(panel){
   const out=[];
   const minTs=nowS-CFG.MAX_AGE_DAYS*86400;
   for(const x of S.txs.values()){
-    if(x.w==='radar'||!(x.ts>minTs)||x.ts>nowS+600) continue;               /* drop corrupted / outdated timestamps */
+    if(x.w==='radar'||x.w==='gt'||!(x.ts>minTs)||x.ts>nowS+600) continue;               /* drop corrupted / outdated timestamps */
     const w=byId.get(x.w); if(!w||!w.addr||norm(w.addr)!==x.a||!P.types.includes(w.type)) continue;
     if(panel==='inst'){ if(!SMC_ALLOW.has(x.sym)||x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue; }   /* institutions: strict $1M-$50M */
     else if(!(SMC_ALLOW.has(x.sym)||x.liq)||x.usd<CFG.SMC_DUST||x.usd>1e9) continue;                  /* smart money: no $1M minimum */
     x.who=whoOf(x); x.via=w.type==='exch'?w.label:(x.via0||''); x.pk=panel; x.co=baseName(w.label); x.verified=!!(w.builtin&&!w.slot&&!w.unv);
     out.push(x);
+  }
+  if(panel==='smc') for(const x of S.gt.rows.values()){
+    if(!(x.ts>minTs)||x.ts>nowS+600||x.usd<CFG.SMC_DUST) continue;
+    x.who=shortAddr(x.addr); x.via=x.via0; x.pk='smc'; x.co='GeckoTerminal'; x.verified=false; out.push(x);
   }
   out.sort((a,b)=>b.ts-a.ts||(a.id<b.id?1:-1));       /* strictly newest first */
   const seen=new Set(), ded=[];
@@ -1006,7 +1024,7 @@ function renderPanel(k,vis){
   if(k==='inst'&&v.co!=='all') rows=rows.filter(x=>x.co===v.co);
   if(v.coin!=='all') rows=rows.filter(x=>(ALIAS[x.sym]||x.sym)===v.coin);
   const q=(v.q||'').trim().toLowerCase();
-  if(q) rows=rows.filter(x=>[x.who,x.via,x.sym,x.hash,x.cp,x.co,fmtDate(x.ts)].join(' ').toLowerCase().includes(q));
+  if(q) rows=rows.filter(x=>[x.who,x.addr,x.via,x.sym,x.hash,x.cp,x.co,fmtDate(x.ts)].join(' ').toLowerCase().includes(q));
   /* quick filter pills (same markup on both panels) */
   const pill=(kind,val,label,on)=>`<button class="pl ${on?'on':''}" data-act="pill" data-k="${k}" data-kind="${kind}" data-v="${esc(val)}">${esc(label)}</button>`;
   let ph='';
@@ -1041,7 +1059,8 @@ function renderPanel(k,vis){
     let html=shown.map(x=>{
       const buy=x.side==='buy';
       const sub=x.via?`<span class="sub">${esc(t('via',{x:x.via}))}</span>`:'';
-      return `<tr class="${S.fresh.has(x.id)?'flash':''}"><td><b>${esc(x.who)}</b>${x.verified&&k==='inst'?VERIFIED:''}${sub}</td>
+      const whoCell=x.addr?`<b class="ad"><a class="al" href="${mkAddr(x.chain,esc(x.addr))}" target="_blank" rel="noopener noreferrer" title="${esc(x.addr)}">${esc(x.who)}</a><button class="cp" data-act="copy" data-v="${esc(x.addr)}" title="${esc(t('copy'))}" aria-label="${esc(t('copy'))}">⧉</button></b>`:`<b>${esc(x.who)}</b>${x.verified&&k==='inst'?VERIFIED:''}`;
+      return `<tr class="${S.fresh.has(x.id)?'flash':''}"><td>${whoCell}${sub}</td>
 <td><span class="cc">${coinIcon(x.sym)}${esc(x.sym)}</span></td>
 <td><span class="pill ${buy?'buy':'sell'}">${esc(t(buy?'buy':'sell'))}</span></td>
 <td class="num ${buy?'up':'down'}"${x.est?` title="${esc(t('est'))}"`:''}>${usd(x.usd)}</td>
@@ -1181,6 +1200,7 @@ document.addEventListener('click',e=>{
   if(act==='speak') speak(k);
   else if(act==='more'){S.view[k].limit+=100;render()}
   else if(act==='pill'){const v=S.view[k];v[b.dataset.kind]=b.dataset.v;v.limit=100;render()}
+  else if(act==='copy'){const v=b.dataset.v;const ok=()=>toast(t('copied'));(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(v).then(ok):Promise.reject()).catch(()=>{const ta=document.createElement('textarea');ta.value=v;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){}ta.remove()})}
   else if(act==='aitoggle'){S.aiOpen=!S.aiOpen;LS.set('aa.aiOpen',S.aiOpen);render()}
   else if(act==='setaddr') openModal(S.wallets.find(w=>w.id===id));
   else if(act==='rm'){
@@ -1201,8 +1221,9 @@ function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('sh
   await DB.open();
   const saved=await DB.all(); const minTs=Date.now()/1000-CFG.MAX_AGE_DAYS*86400;
   saved.forEach(x=>{ if(x.w!=='radar'&&x.ts>minTs&&x.ts<Date.now()/1000+600) S.txs.set(x.id,x) });
-  S.loaded=true; doRender();
+  gtLoad(); S.loaded=true; doRender();
   loadPrices().catch(()=>{}); setInterval(()=>loadPrices().catch(()=>{}),20000);
+  geckoTick(true); setInterval(()=>{if(!document.hidden) geckoTick(false)},15000);
   syncCycle(); setInterval(syncCycle,CFG.POLL_MS);
   setInterval(paintStatus,1000);
 })();
