@@ -126,7 +126,7 @@ a{color:var(--ink);text-decoration:none;font-weight:600}
 /* table */
 .tbody{display:flex;flex-direction:column;background:#fff;border-top:1px solid var(--line);min-height:300px;min-width:0}
 .tw{flex:1 1 auto;overflow:auto;max-height:520px}
-table{width:100%;border-collapse:collapse;min-width:680px}
+table{width:100%;border-collapse:collapse;min-width:640px}
 th{position:sticky;top:0;background:#fff;text-align:left;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);font-weight:800;padding:10px 12px;border-bottom:2px solid var(--gb);z-index:1;white-space:nowrap}
 td{padding:9px 12px;border-bottom:1px solid #F1F0EE;white-space:nowrap;color:var(--ink)}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
@@ -140,7 +140,8 @@ tr.liverow td{text-align:center;color:var(--mut);font-size:12.5px;padding:18px;b
 .txb{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border:1px solid var(--gb);border-radius:7px;background:#fff;font-size:12px;font-weight:700;transition:.15s}
 .txb:hover{background:var(--gold);border-color:var(--gold2);color:var(--ink);box-shadow:0 2px 8px rgba(212,175,55,.35)}
 .cc{display:flex;align-items:center;gap:7px;font-weight:700}
-.sub{color:var(--mut);font-size:11.5px;display:block}
+.sub{color:var(--mut);font-size:11.5px;display:block;max-width:170px;overflow:hidden;text-overflow:ellipsis}
+td:first-child b{display:inline-block;max-width:170px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
 .flash td{animation:fl 6s ease-out}
 @keyframes fl{0%{background:#F6E7A8}100%{background:transparent}}
 .empty{flex:1;display:none;align-items:center;justify-content:center;padding:30px 18px;text-align:center;color:var(--mut);background:#fff;font-weight:600}
@@ -155,6 +156,7 @@ details.wl summary{cursor:pointer;padding:10px 18px;font-weight:700;font-size:12
 .wr .ad{color:var(--mut);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px}
 .wr .st{margin-left:auto;font-size:11.5px;border-radius:999px;padding:1px 9px;border:1px solid var(--line)}
 .st.ok{color:var(--buyink);border-color:#A7F3D0;background:#ECFDF5} .st.err{color:var(--sellink);border-color:#FECDD3;background:#FFF1F2} .st.idle{color:var(--mut)}
+.wls{max-height:230px;overflow:auto}
 .ib{border:0;background:none;cursor:pointer;color:var(--mut);padding:2px 6px;border-radius:6px}
 .ib:hover{background:var(--goldsoft);color:var(--ink)}
 
@@ -258,7 +260,7 @@ const baseName=l=>String(l).replace(/\s*\(.*\)\s*$/,'').trim();
 
 /* ================= config ================= */
 const CFG={
-  POLL_MS:60000, STAGGER_MS:1500, BACKFILL_PAGES:3, OLDER_PAGES:4, AUTO_ROUNDS:8, RADAR_INIT_PAGES:6, RADAR_LIVE_PAGES:4, AI_WINDOW:50, BTC_SWEEP_INPUTS:3,
+  POLL_MS:60000, STAGGER_MS:1500, BACKFILL_PAGES:3, OLDER_PAGES:4, AUTO_ROUNDS:8, RADAR_INIT_PAGES:6, RADAR_LIVE_PAGES:4, AI_WINDOW:80, SMC_DUST:1000, MAX_AGE_DAYS:90, DISC_EVERY_MS:600000, SMC_TOP:30, BTC_SWEEP_INPUTS:3,
   MIN_INST:10000,             // dust filter for institutional panel
   SMC_MIN:1e6, SMC_MAX:5e7    // strict Smart Money range
 };
@@ -281,7 +283,7 @@ uz:{
   tagline:"Institutsional va Smart Money kripto tahlil terminali",
   addWallet:"+ Hamyon qo'shish", older:"Eski tarixni yuklash",
   panelInst:"INSTITUTSIONAL KITLAR", panelInstSub:"Gigantlar harakati ($1M–$50M): BlackRock, Grayscale va boshqalar",
-  panelSmc:"SMART MONEY KITLAR (SMC)", panelSmcSub:"$1M–$50M oralig'idagi ommaviy xarid va sotuv radari",
+  panelSmc:"SMART MONEY KITLAR (SMC)", panelSmcSub:"Top 30 ta eng faol Smart Money hamyonlarining jonli harakatlari",
   colCompany:"Kompaniya", colWho:"Kit / Hamyon", colCoin:"Kripto", colAction:"Harakat", colAmount:"Summa (USD)", colDate:"Sana va soat", colProof:"Isbot",
   buy:"SOTIB OLDI", sell:"SOTDI", bought:"Jami sotib olingan", sold:"Jami sotilgan", net:"Sof pul oqimi",
   pAll:"Hammasi", p24:"24 soat", p7:"7 kun", p30:"30 kun",
@@ -306,7 +308,7 @@ uz:{
   aiWinBull:"Oxirgi {k} ta yirik harakat ({range}) bo'yicha {actors} {coin} ga jami {usd} pul kirityapti (xarid ulushi {sh}%). Talab kuchli — narx taxminan {p}% ehtimol bilan yuqoriga ko'tariladi.",
   aiWinBear:"Oxirgi {k} ta yirik harakat ({range}) bo'yicha {actors} {coin} dan jami {usd} pulini chiqarib olyapti (sotuv bosimi {sh}%). Sotuv bosimi kuchli — narx taxminan {p}% ehtimol bilan pastga tushadi.",
   aiFlat:"{coin} bo'yicha oxirgi {k} ta harakatda xarid va sotuv deyarli teng (xarid {b}%, sotuv {s}%). Aniq yo'nalish yo'q — narx taxminan {p}% ehtimol bilan yon harakatda qoladi.",
-  netWin:"So'nggi harakatlar sof oqimi", radarName:"Kit radari (Blockscout)",
+  netWin:"So'nggi harakatlar sof oqimi", radarName:"Faol hamyonlar radari (Blockscout)",
   collapse:"Yig'ish / ochish", liveHint:"Yangi tranzaksiyalar shu yerda jonli ko'rinadi…",
   footer:"Ma'lumot manbalari: mempool.space, eth.blockscout.com, OKX, Binance, CoinGecko — hammasi bepul va kalitsiz. Barcha yozuvlar brauzeringizda saqlanadi."
 },
@@ -314,7 +316,7 @@ ru:{
   tagline:"Терминал аналитики институциональных и Smart Money криптопотоков",
   addWallet:"+ Добавить кошелёк", older:"Загрузить старую историю",
   panelInst:"ИНСТИТУЦИОНАЛЬНЫЕ КИТЫ", panelInstSub:"Движения гигантов ($1M–$50M): BlackRock, Grayscale и другие",
-  panelSmc:"SMART MONEY КИТЫ (SMC)", panelSmcSub:"Радар массовых покупок и продаж на $1M–$50M",
+  panelSmc:"SMART MONEY КИТЫ (SMC)", panelSmcSub:"Живые движения 30 самых активных кошельков Smart Money",
   colCompany:"Компания", colWho:"Кит / Кошелёк", colCoin:"Крипто", colAction:"Действие", colAmount:"Сумма (USD)", colDate:"Дата и время", colProof:"Proof",
   buy:"КУПИЛ", sell:"ПРОДАЛ", bought:"Всего куплено", sold:"Всего продано", net:"Чистый денежный поток",
   pAll:"Всё время", p24:"24 часа", p7:"7 дней", p30:"30 дней",
@@ -339,7 +341,7 @@ ru:{
   aiWinBull:"По последним {k} крупным операциям ({range}) {actors} направляют в {coin} в общей сложности {usd} (доля покупок {sh}%). Спрос сильный — цена вырастет с вероятностью около {p}%.",
   aiWinBear:"По последним {k} крупным операциям ({range}) {actors} выводят из {coin} в общей сложности {usd} (давление продавцов {sh}%). Давление продавцов сильное — цена снизится с вероятностью около {p}%.",
   aiFlat:"По {coin} в последних {k} операциях покупки и продажи почти равны (покупки {b}%, продажи {s}%). Чёткого направления нет — цена останется в боковике с вероятностью около {p}%.",
-  netWin:"Чистый поток последних операций", radarName:"Радар китов (Blockscout)",
+  netWin:"Чистый поток последних операций", radarName:"Радар активных кошельков (Blockscout)",
   collapse:"Свернуть / развернуть", liveHint:"Новые транзакции появятся здесь в реальном времени…",
   footer:"Источники данных: mempool.space, eth.blockscout.com, OKX, CoinGecko — всё бесплатно и без ключей. Все записи хранятся в вашем браузере."
 },
@@ -347,7 +349,7 @@ en:{
   tagline:"Institutional & Smart Money crypto analytics terminal",
   addWallet:"+ Add wallet", older:"Load older history",
   panelInst:"INSTITUTIONAL WHALES", panelInstSub:"Giants' moves ($1M–$50M): BlackRock, Grayscale and more",
-  panelSmc:"SMART MONEY WHALES (SMC)", panelSmcSub:"Mass buy/sell radar for $1M–$50M trades",
+  panelSmc:"SMART MONEY WHALES (SMC)", panelSmcSub:"Live moves of the 30 most active Smart Money wallets",
   colCompany:"Company", colWho:"Whale / Wallet", colCoin:"Crypto", colAction:"Action", colAmount:"Amount (USD)", colDate:"Date & time", colProof:"Proof",
   buy:"BOUGHT", sell:"SOLD", bought:"Total bought", sold:"Total sold", net:"Net cash flow",
   pAll:"All time", p24:"24 hours", p7:"7 days", p30:"30 days",
@@ -372,7 +374,7 @@ en:{
   aiWinBull:"Across the latest {k} large moves ({range}), {actors} have put {usd} in total into {coin} (buy share {sh}%). Demand is strong — price is likely to rise, with roughly {p}% probability.",
   aiWinBear:"Across the latest {k} large moves ({range}), {actors} have withdrawn {usd} in total from {coin} (selling pressure {sh}%). Selling pressure is strong — price is likely to fall, with roughly {p}% probability.",
   aiFlat:"For {coin}, buying and selling are almost even across the last {k} moves (buy {b}%, sell {s}%). No clear direction — price likely stays range-bound, roughly {p}% probability.",
-  netWin:"Net flow of latest moves", radarName:"Whale radar (Blockscout)",
+  netWin:"Net flow of latest moves", radarName:"Active-wallet radar (Blockscout)",
   collapse:"Collapse / expand", liveHint:"New transactions appear here live…",
   footer:"Data sources: mempool.space, eth.blockscout.com, OKX, CoinGecko — all free and keyless. All records are stored in your browser."
 }};
@@ -403,7 +405,7 @@ function loadWallets(){
 const S={
   wallets:loadWallets(),
   meta:LS.get('alimovaura_meta_v3',{}),
-  txs:new Map(), prices:LS.get('aa.prices',{}), hist:{}, histP:{}, fresh:new Map(), attempted:new Set(), radarTried:false, radar:{ok:0,err:null,last:0},
+  txs:new Map(), prices:LS.get('aa.prices',{}), hist:{}, histP:{}, fresh:new Map(), attempted:new Set(), radarTried:LS.get('aa.wallets.v1',[]).some(w=>w.auto), radar:{ok:0,err:null,last:0},
   busy:false, lastCycle:0, loaded:false, firstDone:false, speaking:null, aiText:{inst:'',smc:''}, aiOpen:LS.get('aa.aiOpen',true),
   view:{inst:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'},smc:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'}}
 };
@@ -538,7 +540,7 @@ function priceAt(sym,ts){
 /* ================= parsers ================= */
 const mkUrl=(chain,hash)=>chain==='BTC'?`https://mempool.space/tx/${hash}`:`https://etherscan.io/tx/${hash}`;
 function mkRec(w,o){
-  return {id:o.id,w:w.id,a:norm(w.addr),chain:w.chain,sym:o.sym,side:o.side,amt:o.amt,usd:o.usd,ts:o.ts,hash:o.hash,cp:o.cp||null,est:!!o.est};
+  return {id:o.id,w:w.id,a:norm(w.addr),chain:w.chain,sym:o.sym,side:o.side,amt:o.amt,usd:o.usd,ts:o.ts,hash:o.hash,cp:o.cp||null,est:!!o.est,liq:o.liq?1:0,via0:o.via0||''};
 }
 function parseBtc(w,tx){
   const A=w.addr, conf=tx.status&&tx.status.confirmed;
@@ -591,7 +593,7 @@ function parseEthInt(w,t){
   const ts=Math.floor(Date.parse(t.timestamp)/1000); if(!ts) return null;
   const pr=priceAt('ETH',ts); if(!pr) return null;
   const eth=Number(wei)/1e18;
-  return mkRec(w,{id:`${w.id}:${hash}:i${t.index??''}`,sym:'ETH',amt:eth,usd:eth*pr.p,ts,hash,cp,est:pr.est,
+  return mkRec(w,{id:`${w.id}:${hash}:i${t.index??''}`,sym:'ETH',amt:eth,usd:eth*pr.p,ts,hash,cp,est:pr.est,via0:viaOf(out?t.to:t.from),
     side:w.type==='exch'?(out?'buy':'sell'):(out?'sell':'buy')});
 }
 function parseEthTx(w,t){
@@ -605,12 +607,15 @@ function parseEthTx(w,t){
   const ts=Math.floor(Date.parse(t.timestamp)/1000); if(!ts) return null;
   const pr=priceAt('ETH',ts); if(!pr) return null;
   const eth=Number(wei)/1e18;
-  return mkRec(w,{id:`${w.id}:${t.hash}`,sym:'ETH',amt:eth,usd:eth*pr.p,ts,hash:t.hash,cp,est:pr.est,
+  return mkRec(w,{id:`${w.id}:${t.hash}`,sym:'ETH',amt:eth,usd:eth*pr.p,ts,hash:t.hash,cp,est:pr.est,via0:viaOf(out?t.to:t.from),
     side:w.type==='exch'?(out?'buy':'sell'):(out?'sell':'buy')});
 }
+const viaOf=a=>{const l=addrLabel(a);return(DEX_RE.test(l)||EXCH_RE.test(l))?l.slice(0,28):''};
 function parseTok(w,t){
-  const tok=t.token||{}; const sym=(tok.symbol||'').trim();
-  if(!sym||(tok.type&&tok.type!=='ERC-20')||STABLES.has(sym.toUpperCase())) return null;
+  const tok=t.token||{}; const sym=(tok.symbol||'').trim().toUpperCase();
+  if(!sym||(tok.type&&tok.type!=='ERC-20')) return null;
+  const isStable=STABLES.has(sym);
+  if(isStable&&w.type!=='smc') return null;
   const hash=t.transaction_hash||t.tx_hash; if(!hash) return null;
   const from=norm(t.from&&t.from.hash), to=norm(t.to&&t.to.hash), A=norm(w.addr);
   if(!from||!to||from===to) return null;
@@ -620,12 +625,23 @@ function parseTok(w,t){
   const tot=t.total||{}; let raw; try{raw=BigInt(tot.value||'0')}catch(e){return null}
   const dec=parseInt(tot.decimals??tok.decimals??18,10);
   const amt=Number(raw)/Math.pow(10,dec); if(!(amt>0)) return null;
+  /* spoof guard: well-known symbols must be the real contract; unknown tokens must be liquid */
+  const known=RADAR_TOKENS.find(k=>k[0]===sym), ta=String(tok.address_hash||tok.address||'').toLowerCase();
+  let liq=false;
+  if(known){ if(ta?ta!==known[1].toLowerCase():isStable) return null; }
+  else if(isStable) return null;
+  else{
+    const rate=+tok.exchange_rate, vol=+tok.volume_24h||0, mc=+tok.circulating_market_cap||0;
+    if(!(rate>0)||!(vol>=2e6||mc>=1e8)) return null;
+    liq=true;
+  }
   let price=null,est=true;
-  const wb=WRAPPED[sym.toUpperCase()];
-  if(wb){const pr=priceAt(wb,ts);if(pr){price=pr.p;est=pr.est}}
+  const wb=WRAPPED[sym];
+  if(isStable){price=1;est=false}
+  else if(wb){const pr=priceAt(wb,ts);if(pr){price=pr.p;est=pr.est}}
   else if(tok.exchange_rate!=null&&+tok.exchange_rate>0) price=+tok.exchange_rate;
   if(!price) return null;
-  return mkRec(w,{id:`${w.id}:${hash}:${t.log_index??sym}`,sym:sym.slice(0,8).toUpperCase(),amt,usd:amt*price,ts,hash,cp,est,
+  return mkRec(w,{id:`${w.id}:${hash}:${t.log_index??sym}`,sym:sym.slice(0,8),amt,usd:amt*price,ts,hash,cp,est,liq,via0:viaOf(out?t.to:t.from),
     side:w.type==='exch'?(out?'buy':'sell'):(out?'sell':'buy')});
 }
 
@@ -651,13 +667,13 @@ async function fetchBtc(w,mode){
 async function fetchEth(w,mode){
   const m=meta(w.id); m.next=m.next||{}; m.end=m.end||{};
   const base=`https://eth.blockscout.com/api/v2/addresses/${w.addr}`;
-  const kinds=w.type==='exch'?['transactions','token-transfers']:['transactions','internal-transactions','token-transfers'];
+  const kinds=(w.type==='exch'||w.auto)?['transactions','token-transfers']:['transactions','internal-transactions','token-transfers'];
   const res={}; kinds.forEach(k=>res[k]=[]); let fails=0;
   for(const kind of kinds){
     try{
       let np=null,pages;
       if(mode==='older'){ if(m.end[kind]||!m.next[kind]) continue; np=m.next[kind]; pages=CFG.OLDER_PAGES; }
-      else pages=mode==='init'?CFG.BACKFILL_PAGES:1;
+      else pages=mode==='init'?(w.auto?1:CFG.BACKFILL_PAGES):1;
       for(let p=0;p<pages;p++){
         const q=new URLSearchParams();
         if(kind==='token-transfers') q.set('type','ERC-20');
@@ -676,7 +692,9 @@ async function fetchEth(w,mode){
   if(fails===kinds.length) throw res.err||new Error('fetch failed');
   return res;
 }
-const passIngest=(w,r)=>SMC_ALLOW.has(r.sym)&&r.usd>=CFG.SMC_MIN&&r.usd<=CFG.SMC_MAX;
+const passIngest=(w,r)=>(r.ts*1000>Date.now()-CFG.MAX_AGE_DAYS*864e5&&r.ts*1000<Date.now()+6e5)&&(w.type==='inst'
+  ?(SMC_ALLOW.has(r.sym)&&r.usd>=CFG.SMC_MIN&&r.usd<=CFG.SMC_MAX)            /* institutions: strict $1M-$50M */
+  :((SMC_ALLOW.has(r.sym)||r.liq)&&r.usd>=CFG.SMC_DUST&&r.usd<=1e9));        /* smart money: every real trade */
 async function syncWallet(w,mode){
   const m=meta(w.id);
   await Promise.all([loadHist('BTC'),loadHist('ETH')]);
@@ -723,7 +741,7 @@ async function bgHistory(){          /* automatic deep history, runs in the back
       let did=false;
       for(const w of active()){
         const m=meta(w.id);
-        if(!m.initDone||(m.auto||0)>=CFG.AUTO_ROUNDS) continue;
+        if(w.auto||!m.initDone||(m.auto||0)>=CFG.AUTO_ROUNDS) continue;
         if(historyDone(m,w)){m.auto=CFG.AUTO_ROUNDS;continue}
         try{ await syncWallet(w,'older'); }catch(e){}
         m.auto=(m.auto||0)+1; did=true; saveMeta(); render(); await sleep(400);
@@ -738,7 +756,8 @@ async function syncCycle(){
   try{
     if(!S.prices.BTC||!S.prices.ETH) await loadPrices();
     /* all tracked wallets + whale radar fetched concurrently (3 at a time, per-host throttled) */
-    await pool([()=>syncRadar(),...active().map(w=>()=>syncOneWallet(w))],3);
+    if(discDue()) await syncRadar();
+    await pool(active().map(w=>()=>syncOneWallet(w)),3);
   }catch(e){}
   S.busy=false; S.lastCycle=Date.now(); S.firstDone=true; saveMeta(); render(); paintStatus();
   bgHistory();
@@ -779,70 +798,71 @@ function classify(from,to){
   }
   return null;
 }
-function parseRadar(job,it){
-  const ts=Math.floor(Date.parse(it.timestamp)/1000); if(!ts) return null;
-  let sym,amt,price,est=false,hash,key;
-  if(job.kind==='tx'){
-    if(it.status==='error') return null;
-    let wei; try{wei=BigInt(it.value||'0')}catch(e){return null}
-    if(wei===0n) return null;
-    const pr=priceAt('ETH',ts); if(!pr) return null;
-    sym='ETH'; amt=Number(wei)/1e18; price=pr.p; est=pr.est; hash=it.hash; key='';
-  }else{
-    const tok=it.token||{}; if(tok.type&&tok.type!=='ERC-20') return null;
-    sym=String(tok.symbol||job.fb||'').toUpperCase().slice(0,8);
-    const known=RADAR_TOKENS.find(k=>k[0]===(job.fb||sym)); if(!known||!SMC_ALLOW.has(known[0])) return null;   /* liquid majors only */
-    const ta=String(tok.address_hash||tok.address||'').toLowerCase();
-    if(job.fb?(ta&&ta!==known[1].toLowerCase()):(ta!==known[1].toLowerCase())) return null;                      /* reject spoofed symbols */
-    sym=known[0];
-    const tot=it.total||{}; let raw; try{raw=BigInt(tot.value||'0')}catch(e){return null}
-    const dec=parseInt(tot.decimals??tok.decimals??(known&&known[2])??18,10);
-    amt=Number(raw)/Math.pow(10,dec); if(!(amt>0)) return null;
-    if(STABLES.has(sym)) price=1;
-    else if(WRAPPED[sym]){const pr=priceAt(WRAPPED[sym],ts);if(!pr)return null;price=pr.p;est=pr.est}
-    else if(tok.exchange_rate!=null&&+tok.exchange_rate>0){price=+tok.exchange_rate;est=true}
-    else return null;
-    hash=it.transaction_hash||it.tx_hash; key=':'+(it.log_index??'');
-  }
-  const usdv=amt*price; if(!hash||usdv<CFG.SMC_MIN||usdv>CFG.SMC_MAX) return null;
-  const c=classify(it.from,it.to); if(!c) return null;
-  const lab=(c.whale.ens_domain_name||c.whale.name||'').slice(0,28);
-  return {id:`radar:${hash}${key}`,w:'radar',a:'radar',chain:'ETH',sym,side:c.side,amt,usd:usdv,ts,hash,cp:c.whale.hash,est,lab,via0:c.via.slice(0,28)};
+const ROUTERS=[['0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'],['0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'],['0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD'],['0x1111111254EEB25477B68fb85Ed929f73A960582'],['0x111111125421cA6dc452d289314280a0f8842A65']];  /* Uniswap V2/V3/Universal, 1inch v5/v6 */
+function tokenUsd(it,fb){
+  const ts=Math.floor(Date.parse(it.timestamp)/1000), tok=it.token||{};
+  const sym=String(tok.symbol||fb||'').toUpperCase(); if(!sym) return 0;
+  const tot=it.total||{}; let raw; try{raw=BigInt(tot.value||'0')}catch(e){return 0}
+  const amt=Number(raw)/Math.pow(10,parseInt(tot.decimals??tok.decimals??18,10)); if(!(amt>0)) return 0;
+  let price=0;
+  if(STABLES.has(sym)) price=1; else if(WRAPPED[sym]){const pr=priceAt(WRAPPED[sym],ts);price=pr?pr.p:0} else if(+tok.exchange_rate>0) price=+tok.exchange_rate;
+  return amt*price;
 }
-async function radarJob(job,out){
-  const rm=meta('radar'), st=rm[job.key]||(rm[job.key]={});
-  const init=!st.lastTs, maxP=init?CFG.RADAR_INIT_PAGES:CFG.RADAR_LIVE_PAGES;
-  let np=null,newest=st.lastTs||0;
-  for(let p=0;p<maxP;p++){
-    const q=new URLSearchParams(); if(np) for(const [k,v] of Object.entries(np)) if(v!=null) q.set(k,v);
-    const qs=q.toString();
-    const d=await jget(job.url+(qs?(job.url.includes('?')?'&':'?')+qs:''));
-    const items=d.items||[]; let oldest=Infinity;
-    for(const it of items){
-      const ts=Math.floor(Date.parse(it.timestamp)/1000)||0;
-      if(ts){newest=Math.max(newest,ts);oldest=Math.min(oldest,ts)}
-      const r=parseRadar(job,it); if(r) out.push(r);
-    }
-    np=d.next_page_params||null;
-    if(!np||!items.length) break;
-    if(!init&&oldest<=st.lastTs) break;
-  }
-  st.lastTs=newest;
-}
+const discDue=()=>!S.meta.discLast||Date.now()-S.meta.discLast>CFG.DISC_EVERY_MS;
+/* rank real on-chain traders (EOAs swapping on DEXs / moving liquid tokens) by recent traded volume -> top 30 watchlist */
 async function syncRadar(){
   await Promise.all([loadHist('ETH'),loadHist('BTC')]);
-  const B='https://eth.blockscout.com/api/v2';
+  const B='https://eth.blockscout.com/api/v2', agg=new Map();
+  const okTrader=a=>a&&a.hash&&!a.is_contract&&!EXCH_RE.test(addrLabel(a))&&!EXCH_ADDR.has(norm(a.hash));
+  const bump=(a,usdv)=>{const k=a.hash.toLowerCase(),e=agg.get(k)||{n:0,usd:0,lab:''};e.n++;e.usd+=usdv;if(!e.lab)e.lab=(a.ens_domain_name||a.name||'').slice(0,28);agg.set(k,e)};
   const jobs=[
-    ...RADAR_TOKENS.map(([sym,addr])=>({key:'tok:'+sym,url:`${B}/tokens/${addr}/transfers`,kind:'tok',fb:sym})),
-    {key:'gtok',url:`${B}/token-transfers?type=ERC-20`,kind:'tok'},
-    {key:'gtx',url:`${B}/transactions?filter=validated`,kind:'tx'}
+    ...RADAR_TOKENS.map(([sym,addr])=>({url:`${B}/tokens/${addr}/transfers`,kind:'tok',fb:sym})),
+    {url:`${B}/token-transfers?type=ERC-20`,kind:'tok'},
+    ...ROUTERS.map(([a])=>({url:`${B}/addresses/${a}/transactions`,kind:'router'}))
   ];
-  const out=[]; let ok=0;
-  await pool(jobs.map(j=>async()=>{ try{await radarJob(j,out);ok++}catch(e){S.radar.err=e.message||String(e)} }),3);
-  const add=[];
-  for(const r of out){ const had=S.txs.has(r.id); S.txs.set(r.id,r); add.push(r); if(!had&&S.radarTried) S.fresh.set(r.id,Date.now()); }
-  await DB.put(add);
-  if(ok){S.radar.ok=ok;S.radar.err=null;S.radar.last=Date.now();S.lastLive=Date.now()}
+  let ok=0;
+  await pool(jobs.map(job=>async()=>{
+    try{
+      let np=null;
+      for(let p=0;p<3;p++){
+        const q=new URLSearchParams(); if(np) for(const [k,v] of Object.entries(np)) if(v!=null) q.set(k,v);
+        const qs=q.toString(), d=await jget(job.url+(qs?(job.url.includes('?')?'&':'?')+qs:''));
+        for(const it of d.items||[]){
+          if(job.kind==='tok'){
+            const f=it.from,t2=it.to; if(!f||!t2) continue;
+            const tr=(!f.is_contract&&t2.is_contract)?f:((!t2.is_contract&&f.is_contract)?t2:null);
+            if(okTrader(tr)) bump(tr,tokenUsd(it,job.fb));
+          }else if(okTrader(it.from)){
+            let wei=0n; try{wei=BigInt(it.value||'0')}catch(e){}
+            bump(it.from,(S.prices.ETH?Number(wei)/1e18*S.prices.ETH.p:0));
+          }
+        }
+        np=d.next_page_params||null; if(!np) break;
+      }
+      ok++;
+    }catch(e){S.radar.err=e.message||String(e)}
+  }),3);
+  if(ok){
+    const disc=S.meta.disc||(S.meta.disc={});
+    for(const k in disc){disc[k].n*=0.85;disc[k].usd*=0.85}
+    for(const [k,e] of agg){const d=disc[k]||(disc[k]={n:0,usd:0,lab:''});d.n+=e.n;d.usd+=e.usd;if(e.lab)d.lab=e.lab}
+    const ranked=Object.entries(disc).filter(([,d])=>d.n>=2).sort((a,b)=>(b[1].usd-a[1].usd)||(b[1].n-a[1].n));
+    for(const [k] of Object.entries(disc).filter(x=>!ranked.slice(0,150).some(r=>r[0]===x[0]))) delete disc[k];
+    const rank=new Map(ranked.map(([k],i)=>[k,i]));
+    const manual=S.wallets.filter(w=>!w.auto), taken=new Set(manual.map(w=>norm(w.addr)).filter(Boolean).map(a=>a.toLowerCase()));
+    const cur=S.wallets.filter(w=>w.auto);
+    const keep=cur.filter(w=>(rank.get(w.addr.toLowerCase())??999)<CFG.SMC_TOP+15);     /* hysteresis: avoid flapping */
+    const keepSet=new Set(keep.map(w=>w.addr.toLowerCase())), add=[];
+    for(const [k,d] of ranked){
+      if(keep.length+add.length>=CFG.SMC_TOP) break;
+      if(keepSet.has(k)||taken.has(k)) continue;
+      add.push({id:'a_'+k.slice(2,12),label:d.lab||shortAddr(k),addr:k,chain:'ETH',type:'smc',auto:true});
+    }
+    for(const w of cur) if(!keep.includes(w)) delete S.meta[w.id];
+    S.wallets=[...manual,...keep,...add];
+    saveWallets(); S.meta.discLast=Date.now();
+    S.radar.ok=ok; S.radar.err=null; S.radar.last=Date.now(); S.lastLive=Date.now();
+  }
   S.radarTried=true; saveMeta(); render();
 }
 const ready=k=>S.loaded&&(k==='smc'?S.radarTried:true)&&S.wallets.filter(w=>w.addr&&w.chain&&PANELS[k].types.includes(w.type)).every(w=>S.attempted.has(w.id));
@@ -905,7 +925,7 @@ function windowSignals(list){
   });
 }
 function analyze(list){
-  const real=list.filter(x=>AI_ALLOW.has(x.sym)&&x.usd>=CFG.SMC_MIN&&x.usd<=CFG.SMC_MAX).map(x=>({...x,sym:ALIAS[x.sym]||x.sym}));
+  const real=list.filter(x=>AI_ALLOW.has(x.sym)&&x.usd>=CFG.SMC_DUST&&x.usd<=1e9&&x.ts>Date.now()/1000-CFG.MAX_AGE_DAYS*86400).map(x=>({...x,sym:ALIAS[x.sym]||x.sym}));
   const st=streakSignals(real), used=new Set(st.slice(0,2).map(s=>s.sym));
   const ws=windowSignals(real);
   const rest=ws.filter(s=>!used.has(s.sym)).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net));
@@ -933,15 +953,13 @@ function visible(panel){
   const P=PANELS[panel], v=S.view[panel], cut=v.period==='24h'?864e2:v.period==='7d'?6048e2:v.period==='30d'?2592e3:0;
   const nowS=Date.now()/1000, byId=new Map(S.wallets.map(w=>[w.id,w]));
   const out=[];
+  const minTs=nowS-CFG.MAX_AGE_DAYS*86400;
   for(const x of S.txs.values()){
-    if(!SMC_ALLOW.has(x.sym)) continue;
-    if(x.w==='radar'){
-      if(panel!=='smc'||x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue;
-      x.who=x.lab||shortAddr(x.cp); x.via=x.via0||''; x.pk=panel; x.co='SMC'; x.verified=false; out.push(x); continue;
-    }
+    if(x.w==='radar'||!(x.ts>minTs)||x.ts>nowS+600) continue;               /* drop corrupted / outdated timestamps */
     const w=byId.get(x.w); if(!w||!w.addr||norm(w.addr)!==x.a||!P.types.includes(w.type)) continue;
-    if(x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue;      /* strict $1M-$50M on both tables */
-    x.who=whoOf(x); x.via=w.type==='exch'?w.label:''; x.pk=panel; x.co=baseName(w.label); x.verified=!!(w.builtin&&!w.slot&&!w.unv);
+    if(panel==='inst'){ if(!SMC_ALLOW.has(x.sym)||x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue; }   /* institutions: strict $1M-$50M */
+    else if(!(SMC_ALLOW.has(x.sym)||x.liq)||x.usd<CFG.SMC_DUST||x.usd>1e9) continue;                  /* smart money: no $1M minimum */
+    x.who=whoOf(x); x.via=w.type==='exch'?w.label:(x.via0||''); x.pk=panel; x.co=baseName(w.label); x.verified=!!(w.builtin&&!w.slot&&!w.unv);
     out.push(x);
   }
   out.sort((a,b)=>b.ts-a.ts||(a.id<b.id?1:-1));       /* strictly newest first */
@@ -1030,7 +1048,6 @@ function renderPanel(k,vis){
 <td>${fmtDate(x.ts)}</td>
 <td><a class="txb" href="${mkUrl(x.chain,esc(x.hash))}" target="_blank" rel="noopener noreferrer">Tx ↗</a></td></tr>`;
     }).join('');
-    if(shown.length<8) html+=`<tr class="liverow"><td colspan="6">${esc(t('liveHint'))}</td></tr>`;
     $(`#${k}-body`).innerHTML=html;
   }
   const more=$(`#${k}-more`); more.style.display=v.hasMore?'':'none'; more.textContent=`${t('more')} (${rows.length-v.limit})`;
@@ -1044,11 +1061,11 @@ function renderWallets(k){
     else if(m.error) st=`<span class="st err" title="${esc(m.error)}">${esc(t('err'))}</span>`;
     else if(m.lastOk) st=`<span class="st ok">${hhmmss(m.lastOk)}</span>`;
     else st=`<span class="st idle">${esc(t('syncing'))}</span>`;
-    const act=!w.addr?`<button class="ib" data-act="setaddr" data-id="${esc(w.id)}">${esc(t('setAddr'))}</button>`
+    const act=w.auto?'':!w.addr?`<button class="ib" data-act="setaddr" data-id="${esc(w.id)}">${esc(t('setAddr'))}</button>`
       :`<button class="ib" data-act="rm" data-id="${esc(w.id)}" title="${esc(t('remove'))}">✕</button>`;
     return `<div class="wr"><span class="n">${esc(w.label)}</span><span class="ad">${esc(shortAddr(w.addr))}</span>${w.chain?`<span class="ad">${w.chain}</span>`:''}${st}${act}</div>`;
   }).join('');
-  box.innerHTML=`<summary>${esc(t('wallets'))} (${list.filter(w=>w.addr).length}/${list.length})</summary>${k==='smc'?radarRow():''}${rows}`;
+  box.innerHTML=`<summary>${esc(t('wallets'))} (${list.filter(w=>w.addr).length}/${list.length})</summary>${k==='smc'?radarRow():''}<div class="wls">${rows}</div>`;
   box.open=S.view[k].open;
 }
 function buildShell(){
@@ -1182,7 +1199,8 @@ function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('sh
   saveWallets(); buildShell(); applyI18n(); renderTicker(); doRender();
   if('speechSynthesis' in window) try{speechSynthesis.getVoices()}catch(e){}
   await DB.open();
-  const saved=await DB.all(); saved.forEach(x=>S.txs.set(x.id,x));
+  const saved=await DB.all(); const minTs=Date.now()/1000-CFG.MAX_AGE_DAYS*86400;
+  saved.forEach(x=>{ if(x.w!=='radar'&&x.ts>minTs&&x.ts<Date.now()/1000+600) S.txs.set(x.id,x) });
   S.loaded=true; doRender();
   loadPrices().catch(()=>{}); setInterval(()=>loadPrices().catch(()=>{}),20000);
   syncCycle(); setInterval(syncCycle,CFG.POLL_MS);
