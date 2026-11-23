@@ -6,141 +6,162 @@
 <title>ALIMOVAURA — Institutsional va Smart Money terminali</title>
 <style>
 :root{
-  --bg:#FFFFFF; --card:#F8FAFC; --line:#E5E7EB; --gb:#E5D399; --ink:#0F172A; --mut:#64748B;
-  --gold:#D4AF37; --gold2:#B8860B; --goldsoft:#FBF6E4;
-  --buy:#059669; --buyink:#059669; --sell:#DC2626; --sellink:#DC2626;
+  --bg:#FFFFFF; --card:#FAFAFA; --line:#E7E5E4; --gb:#EBD99A; --ink:#0F172A; --mut:#334155;
+  --gold:#D4AF37; --gold2:#C59B27; --goldsoft:#FBF5DD; --goldtint:#FFFBEB;
+  --buy:#059669; --buyink:#047857; --sell:#DC2626; --sellink:#BE123C;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:#E5D399 transparent}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#E5D399;border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.45}
 button,select,input{font:inherit;color:inherit}
-a{color:var(--gold2);text-decoration:none;font-weight:600}
-a:hover{text-decoration:underline}
-
-/* ticker */
-.ticker{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--line);background:#fff;scrollbar-width:none}
-.ticker::-webkit-scrollbar{display:none}
-.tk{display:flex;align-items:center;gap:8px;padding:9px 18px;border-right:1px solid var(--line);white-space:nowrap;flex:1 0 auto;justify-content:center}
-.tk .sym{font-weight:700}
-.tk .px{font-variant-numeric:tabular-nums}
-.tk .ch{font-variant-numeric:tabular-nums;font-weight:600;font-size:12.5px}
+a{color:var(--ink);text-decoration:none;font-weight:600}
 .up{color:var(--buyink)} .down{color:var(--sellink)}
 .coin{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:9px;font-weight:800;color:#fff;flex:none;letter-spacing:-.3px}
 
+/* ticker: uniform pill cards */
+.ticker{display:flex;gap:10px;overflow-x:auto;padding:10px 22px;background:#fff;border-bottom:1px solid var(--line);scrollbar-width:none}
+.ticker::-webkit-scrollbar{display:none}
+.tk{display:flex;align-items:center;justify-content:center;gap:9px;padding:7px 14px;min-width:176px;flex:1 0 auto;white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:var(--card);transition:.15s}
+.tk:hover{border-color:var(--gold);background:var(--goldtint);box-shadow:0 2px 10px rgba(212,175,55,.2)}
+.tk .sym{font-weight:800}
+.tk .px{font-variant-numeric:tabular-nums;font-weight:600}
+.badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;font-variant-numeric:tabular-nums}
+.badge.up{background:#D1FAE5;color:#065F46} .badge.down{background:#FFE4E6;color:#9F1239}
+
 /* header */
-.top{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:2px solid transparent;border-image:linear-gradient(90deg,var(--gold),#F1D98A,var(--gold2)) 1;flex-wrap:wrap}
+.top{display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:2px solid transparent;border-image:linear-gradient(90deg,var(--gold),#F1D98A,var(--gold2)) 1;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
 .brand svg{width:34px;height:34px}
-.brand .name{font-size:22px;font-weight:800;letter-spacing:2.4px;background:linear-gradient(90deg,#B8941F,#D4AF37 45%,#C5A028);-webkit-background-clip:text;background-clip:text;color:transparent}
-.brand .tag{font-size:11.5px;color:var(--mut);letter-spacing:.3px;margin-top:-2px}
+.brand .name{font-size:22px;font-weight:800;letter-spacing:2.4px;background:linear-gradient(90deg,#B8941F,#D4AF37 45%,#C59B27);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand .tag{font-size:12px;color:var(--mut);letter-spacing:.3px;margin-top:-2px}
 .sync{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--buy);display:inline-block}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--buy);display:inline-block}
 .dot.busy{background:var(--gold);animation:pulse 1s infinite}
 .dot.err{background:var(--sell)}
 .sync b{color:var(--ink)}
 @keyframes pulse{50%{opacity:.25}}
-.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;cursor:pointer;font-weight:600;transition:.15s}
-.btn:hover{border-color:var(--gold)}
-.btn.gold{background:linear-gradient(180deg,#DDB93F,#C5A028);border-color:#B8941F;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.15)}
-.btn.gold:hover{filter:brightness(1.05)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;cursor:pointer;font-weight:600;transition:.15s;color:var(--ink)}
+.btn:hover{border-color:var(--gold);background:var(--goldtint)}
+.btn.gold{background:linear-gradient(180deg,#E3C14F,#D4AF37);border-color:var(--gold2);color:var(--ink);font-weight:700}
+.btn.gold:hover{filter:brightness(1.04);background:linear-gradient(180deg,#E8C85A,#D4AF37)}
 .btn:disabled{opacity:.5;cursor:default}
 .lang{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
 .lang button{border:0;background:#fff;padding:8px 12px;cursor:pointer;font-weight:700;color:var(--mut)}
-.lang button.on{background:var(--goldsoft);color:var(--gold2)}
+.lang button.on{background:var(--goldsoft);color:var(--ink);box-shadow:inset 0 -2px 0 var(--gold)}
 
-/* layout */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px 22px 10px;align-items:start}
-@media(max-width:1180px){.grid{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--gb);border-radius:14px;overflow:hidden;min-width:0}
-.ph{display:flex;align-items:flex-start;gap:12px;padding:16px 18px 10px;flex-wrap:wrap}
-.ph h2{margin:0;font-size:16px;letter-spacing:1.4px;font-weight:800}
-.ph h2 em{font-style:normal;color:var(--gold2)}
-.ph p{margin:2px 0 0;color:var(--mut);font-size:12.5px}
-
-.sel{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;cursor:pointer}
-
-/* AI */
-.aiwrap{padding:18px 22px 0}
-.aiwrap .ai{margin:0}
-.ai{margin:0 18px 12px;background:#fff;border:1px solid var(--gold);border-radius:12px;padding:12px 14px;box-shadow:0 0 0 3px var(--goldsoft)}
-.aih{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.aih b{font-size:12px;letter-spacing:1.2px;color:var(--gold2)}
-.aih .btn{margin-left:auto;padding:5px 11px;display:flex;align-items:center;gap:6px;font-size:13px}
-.aih .btn svg{width:15px;height:15px}
-.aih .btn.on{background:var(--goldsoft);border-color:var(--gold)}
-.ai ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
-.ai li{padding-left:12px;border-left:3px solid var(--line)}
-.ai li.bull{border-color:var(--buy)} .ai li.bear{border-color:var(--sell)}
-.ai li .bar{height:4px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden;max-width:260px}
+/* AI analyst: compact + collapsible */
+.aiwrap{padding:12px 22px 0}
+.ai{background:#fff;border:1px solid var(--gold);border-radius:12px;padding:8px 14px;box-shadow:0 0 0 3px var(--goldsoft)}
+.aih{display:flex;align-items:center;gap:8px}
+.aih b{font-size:12px;letter-spacing:1.1px;color:var(--ink)}
+.aih b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--gold);margin-right:8px;transform:rotate(45deg)}
+.aih .info{color:var(--mut);cursor:help;font-size:13px}
+.aih .sp{flex:1}
+.btn.sm{padding:4px 10px;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.btn.sm svg{width:14px;height:14px}
+.btn.sm.on{background:var(--goldsoft);border-color:var(--gold)}
+.btn.ico svg{transition:transform .2s}
+.ai.closed .btn.ico svg{transform:rotate(180deg)}
+.aib{margin-top:6px}
+.ai.closed .aib{display:none}
+.ais{display:none;margin-top:4px;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ai.closed .ais{display:block}
+.ai ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.ai li{padding-left:10px;border-left:3px solid var(--line);font-size:13px;line-height:1.35}
+.ai li.bull{border-color:var(--buy)} .ai li.bear{border-color:var(--sell)} .ai li.flat{border-color:var(--gold)}
+.ai li .bar{height:3px;border-radius:3px;background:var(--line);margin-top:4px;overflow:hidden;max-width:220px}
 .ai li .bar i{display:block;height:100%}
-.ai li.flat{border-color:var(--gold)}
-.ai li.flat .bar i{background:var(--gold)}
-.ai li.bull .bar i{background:var(--buy)} .ai li.bear .bar i{background:var(--sell)}
-.ai .none{color:var(--mut)}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-.chip{font-size:11.5px;border:1px solid var(--line);border-radius:20px;padding:2px 9px;background:var(--card);font-variant-numeric:tabular-nums}
-.disc{font-size:11px;color:var(--mut);margin-top:8px}
+.ai li.bull .bar i{background:var(--buy)} .ai li.bear .bar i{background:var(--sell)} .ai li.flat .bar i{background:var(--gold)}
+.ai .none{color:var(--mut);font-size:13px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;align-items:center}
+.chips .lbl{font-size:11.5px;font-weight:700;color:var(--mut);margin-right:2px}
+.cb{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 10px 2px 3px;border-radius:999px;border:1px solid;font-variant-numeric:tabular-nums;font-weight:700}
+.cb .coin{width:18px;height:18px;font-size:8px}
+.cb.up{background:#ECFDF5;border-color:#A7F3D0;color:#065F46} .cb.down{background:#FFF1F2;border-color:#FECDD3;color:#9F1239}
 
-/* flow strip */
-.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 18px 12px}
-.flow div{background:#fff;border:1px solid var(--gb);border-radius:10px;padding:8px 12px}
-.flow small{display:block;color:var(--mut);font-size:11.5px}
-.flow b{font-size:17px;font-variant-numeric:tabular-nums}
+/* layout: both panels share row tracks -> headers, filters and table heads line up */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;padding:14px 22px 10px;align-items:stretch}
+.panel{display:grid;grid-row:span 5;grid-template-rows:subgrid;background:var(--card);border:1px solid var(--gb);border-radius:14px;overflow:hidden;min-width:0}
+@media(max-width:1180px){.grid{grid-template-columns:1fr;row-gap:16px}.panel{grid-row:auto;grid-template-rows:none;display:flex;flex-direction:column}}
+@supports not (grid-template-rows:subgrid){.panel{display:flex;flex-direction:column}}
+.ph{display:flex;align-items:flex-start;gap:12px;padding:14px 18px 8px;flex-wrap:wrap}
+.ph h2{margin:0;font-size:16px;letter-spacing:1.4px;font-weight:800}
+.ph p{margin:2px 0 0;color:var(--mut);font-size:12.5px}
+.sel{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;cursor:pointer}
+.sel:hover,.sel:focus{border-color:var(--gold);outline:none}
+.ins{padding-bottom:2px;min-width:0}
 
-/* toolbar / pills / bars */
-.tb{display:flex;gap:8px;padding:0 18px 10px;flex-wrap:wrap;align-items:center}
-.tb input{flex:1 1 200px;min-width:0;border:1px solid var(--gb);border-radius:8px;padding:7px 10px;background:#fff}
-.tb input:focus{outline:2px solid var(--goldsoft);border-color:var(--gold)}
-.tb .cnt{font-size:11.5px;color:var(--mut);margin-left:auto}
+/* pills / flow / bars */
 .pills{display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 10px;align-items:center}
-.pills .lb{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
-.pl{border:1px solid var(--gb);background:#fff;border-radius:20px;padding:3px 12px;cursor:pointer;font-size:12.5px;font-weight:600}
-.pl:hover{border-color:var(--gold)}
-.pl.on{background:linear-gradient(180deg,#DDB93F,#B8860B);color:#fff;border-color:#B8860B}
-.balwrap{margin:0 18px 12px}
+.pills .lb{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
+.pl{border:1px solid var(--gb);background:#fff;border-radius:999px;padding:3px 12px;cursor:pointer;font-size:12.5px;font-weight:600}
+.pl:hover{border-color:var(--gold);background:var(--goldtint)}
+.pl.on{background:linear-gradient(180deg,#E3C14F,#D4AF37);color:var(--ink);border-color:var(--gold2);font-weight:700}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 18px 10px}
+.flow div{background:#fff;border:1px solid var(--gb);border-radius:10px;padding:7px 12px;min-width:0}
+.flow small{display:block;color:var(--mut);font-size:11.5px;font-weight:600}
+.flow b{font-size:16px;font-variant-numeric:tabular-nums}
+.balwrap{margin:0 18px 10px}
 .bal{display:flex;height:10px;border-radius:10px;overflow:hidden;background:var(--line)}
 .bal i{display:block;height:100%;transition:width .4s}
 .bal .g{background:var(--buy)} .bal .r{background:var(--sell)}
 .bl{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-top:4px}
-.clu{display:flex;flex-direction:column;gap:6px;margin:0 18px 12px}
-.clb{border-radius:10px;padding:8px 12px;font-weight:800;letter-spacing:.4px;border:1px solid}
+.clu{display:flex;flex-direction:column;gap:6px;margin:0 18px 10px}
+.clb{border-radius:10px;padding:7px 12px;font-weight:800;letter-spacing:.4px;border:1px solid}
 .clb small{display:block;font-weight:500;letter-spacing:0;color:var(--mut)}
-.clb.buy{background:rgba(5,150,105,.08);border-color:rgba(5,150,105,.45);color:var(--buy)}
-.clb.sell{background:rgba(220,38,38,.07);border-color:rgba(220,38,38,.45);color:var(--sell)}
-.clnone{font-size:12.5px;color:var(--mut);padding:0 2px}
+.clb.buy{background:#ECFDF5;border-color:#A7F3D0;color:#065F46}
+.clb.sell{background:#FFF1F2;border-color:#FECDD3;color:#9F1239}
 .vb{width:15px;height:15px;vertical-align:-3px;margin-left:5px}
+
+/* toolbar */
+.tb{display:flex;gap:8px;padding:0 18px 10px;flex-wrap:wrap;align-items:center}
+.tb input{flex:1 1 180px;min-width:0;border:1px solid var(--gb);border-radius:8px;padding:7px 10px;background:#fff}
+.tb input:focus{outline:2px solid var(--goldsoft);border-color:var(--gold)}
+.tb input::placeholder{color:#64748B}
+.tb .cnt{font-size:12px;color:var(--mut);margin-left:auto;font-weight:600}
+
 /* table */
-.tw{overflow:auto;max-height:560px;background:#fff;border-top:1px solid var(--line)}
+.tbody{display:flex;flex-direction:column;background:#fff;border-top:1px solid var(--line);min-height:300px;min-width:0}
+.tw{flex:1 1 auto;overflow:auto;max-height:520px}
 table{width:100%;border-collapse:collapse;min-width:680px}
-th{position:sticky;top:0;background:#fff;text-align:left;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);padding:9px 12px;border-bottom:1px solid var(--line);z-index:1;white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid #F1F2F4;white-space:nowrap}
+th{position:sticky;top:0;background:#fff;text-align:left;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);font-weight:800;padding:10px 12px;border-bottom:2px solid var(--gb);z-index:1;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid #F1F0EE;white-space:nowrap;color:var(--ink)}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-td.num{font-weight:700}
-tr:hover td{background:#FFFCF0}
-.pill{display:inline-block;padding:2px 9px;border-radius:6px;font-size:11.5px;font-weight:800;letter-spacing:.4px}
-.pill.buy{background:rgba(5,150,105,.1);color:var(--buyink);border:1px solid rgba(5,150,105,.4)}
-.pill.sell{background:rgba(220,38,38,.09);color:var(--sellink);border:1px solid rgba(220,38,38,.4)}
-.cc{display:flex;align-items:center;gap:7px;font-weight:600}
+td.num{font-weight:800}
+tbody tr{transition:background .15s}
+tbody tr:hover td{background:var(--goldtint)}
+tr.liverow td{text-align:center;color:var(--mut);font-size:12.5px;padding:18px;border-bottom:0;background:#fff!important}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.4px;border:1px solid}
+.pill.buy{background:#ECFDF5;color:#065F46;border-color:#A7F3D0}
+.pill.sell{background:#FFF1F2;color:#9F1239;border-color:#FECDD3}
+.txb{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border:1px solid var(--gb);border-radius:7px;background:#fff;font-size:12px;font-weight:700;transition:.15s}
+.txb:hover{background:var(--gold);border-color:var(--gold2);color:var(--ink);box-shadow:0 2px 8px rgba(212,175,55,.35)}
+.cc{display:flex;align-items:center;gap:7px;font-weight:700}
 .sub{color:var(--mut);font-size:11.5px;display:block}
 .flash td{animation:fl 6s ease-out}
 @keyframes fl{0%{background:#F6E7A8}100%{background:transparent}}
-.empty{padding:34px 18px;text-align:center;color:var(--mut);background:#fff}
+.empty{flex:1;display:none;align-items:center;justify-content:center;padding:30px 18px;text-align:center;color:var(--mut);background:#fff;font-weight:600}
+.foot{background:#fff;min-width:0}
 .more{display:block;width:calc(100% - 36px);margin:10px 18px}
 
 /* wallets */
 details.wl{margin:0;border-top:1px solid var(--line);background:#fff}
 details.wl summary{cursor:pointer;padding:10px 18px;font-weight:700;font-size:12.5px;color:var(--mut)}
-.wr{display:flex;align-items:center;gap:10px;padding:6px 18px;border-top:1px solid #F1F2F4;font-size:12.5px;flex-wrap:wrap}
-.wr .n{font-weight:600}
+.wr{display:flex;align-items:center;gap:10px;padding:6px 18px;border-top:1px solid #F1F0EE;font-size:12.5px;flex-wrap:wrap}
+.wr .n{font-weight:700}
 .wr .ad{color:var(--mut);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px}
-.wr .st{margin-left:auto;font-size:11.5px;border-radius:20px;padding:1px 8px;border:1px solid var(--line)}
-.st.ok{color:var(--buyink);border-color:rgba(16,185,129,.4)} .st.err{color:var(--sellink);border-color:rgba(239,68,68,.4)} .st.idle{color:var(--mut)}
+.wr .st{margin-left:auto;font-size:11.5px;border-radius:999px;padding:1px 9px;border:1px solid var(--line)}
+.st.ok{color:var(--buyink);border-color:#A7F3D0;background:#ECFDF5} .st.err{color:var(--sellink);border-color:#FECDD3;background:#FFF1F2} .st.idle{color:var(--mut)}
 .ib{border:0;background:none;cursor:pointer;color:var(--mut);padding:2px 6px;border-radius:6px}
-.ib:hover{background:var(--goldsoft);color:var(--gold2)}
+.ib:hover{background:var(--goldsoft);color:var(--ink)}
 
 /* modal */
-.ov{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.4);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .ov.show{display:flex}
-.modal{background:#fff;border-radius:14px;width:100%;max-width:470px;padding:22px;border-top:4px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:470px;padding:22px;border-top:4px solid var(--gold);box-shadow:0 20px 60px rgba(15,23,42,.25)}
 .modal h3{margin:0 0 14px;font-size:17px}
 .modal label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:12px 0 5px}
 .modal input,.modal select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff}
@@ -148,9 +169,9 @@ details.wl summary{cursor:pointer;padding:10px 18px;font-weight:700;font-size:12
 .modal .err{color:var(--sellink);font-size:12.5px;min-height:18px;margin-top:8px}
 .modal .row{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
 
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#fff;color:var(--ink);border:1px solid var(--gold);box-shadow:0 8px 28px rgba(184,134,11,.25);padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;font-size:13px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#fff;color:var(--ink);border:1px solid var(--gold);box-shadow:0 8px 28px rgba(197,155,39,.28);padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;font-size:13px}
 .toast.show{opacity:1;transform:translateX(-50%)}
-footer{padding:12px 22px 28px;color:var(--mut);font-size:11.5px;text-align:center}
+footer{padding:12px 22px 28px;color:var(--mut);font-size:12px;text-align:center}
 </style>
 </head>
 <body>
@@ -222,6 +243,9 @@ const LS={
   }catch(e){}
 })();
 const usd=n=>'$'+Math.round(n).toLocaleString('en-US');
+const usdC=n=>{const a=Math.abs(n),f=(v,u)=>'$'+(v>=100?v.toFixed(0):v>=10?v.toFixed(1):v.toFixed(2))+u;
+  return a>=1e12?f(a/1e12,'T'):a>=1e9?f(a/1e9,'B'):a>=1e6?f(a/1e6,'M'):a>=1e3?f(a/1e3,'K'):'$'+Math.round(a)};
+const usdCS=n=>(n<0?'−':'+')+usdC(n);
 const usdSigned=n=>(n<0?'−':'+')+usd(Math.abs(n));
 const fmtDate=ts=>{const d=new Date(ts*1000);return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 const hhmmss=ms=>{const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`};
@@ -256,7 +280,7 @@ const I={
 uz:{
   tagline:"Institutsional va Smart Money kripto tahlil terminali",
   addWallet:"+ Hamyon qo'shish", older:"Eski tarixni yuklash",
-  panelInst:"INSTITUTSIONAL KITLAR", panelInstSub:"Gigantlar harakati: BlackRock, Grayscale va boshqalar",
+  panelInst:"INSTITUTSIONAL KITLAR", panelInstSub:"Gigantlar harakati ($1M–$50M): BlackRock, Grayscale va boshqalar",
   panelSmc:"SMART MONEY KITLAR (SMC)", panelSmcSub:"$1M–$50M oralig'idagi ommaviy xarid va sotuv radari",
   colCompany:"Kompaniya", colWho:"Kit / Hamyon", colCoin:"Kripto", colAction:"Harakat", colAmount:"Summa (USD)", colDate:"Sana va soat", colProof:"Isbot",
   buy:"SOTIB OLDI", sell:"SOTDI", bought:"Jami sotib olingan", sold:"Jami sotilgan", net:"Sof pul oqimi",
@@ -277,18 +301,19 @@ uz:{
   added:"Hamyon qo'shildi", olderDone:"Eski yozuvlar yuklandi", olderNone:"Yuklanadigan eski yozuvlar qolmadi",
   noSpeech:"Brauzer ovozli o'qishni qo'llamaydi.", voiceFallback:"O'zbek ovozi topilmadi, o'xshash turkiy ovoz ishlatildi.", noVoice:"O'zbek ovozi topilmadi — standart ovoz ishlatilmoqda.",
   search:"Qidirish: kompaniya, manzil, Tx, kripto…", sAll:"Barcha harakatlar", dBuy:"Xarid ulushi", dSell:"Sotuv ulushi", pillAll:"Hammasi", pillCoin:"Kripto", pillCo:"Kompaniya", verified:"Tasdiqlangan",
-  cluBuy:"OMMAVIY XARID", cluSell:"OMMAVIY SOTUV", cluInfo:"{k} ta kit · {usd} · so'nggi {h} soat", cluNone:"Hozircha 3 va undan ortiq kitning bir yo'nalishdagi harakati yo'q.", shown:"{a} / {b} yozuv",
-  stLive:"● Jonli blokcheyn ulangan", stConn:"● Blokcheynga ulanmoqda…", stErr:"● Blokcheyn ulanmagan — qayta urinilmoqda",
+  cluBuy:"OMMAVIY XARID", cluSell:"OMMAVIY SOTUV", cluInfo:"{k} ta kit · {usd} · so'nggi {h} soat", shown:"{a} / {b} yozuv",
+  stLive:"Jonli blokcheyn ulangan", stConn:"Blokcheynga ulanmoqda…", stErr:"Blokcheyn ulanmagan — qayta urinilmoqda",
   aiWinBull:"Oxirgi {k} ta yirik harakat ({range}) bo'yicha {actors} {coin} ga jami {usd} pul kirityapti (xarid ulushi {sh}%). Talab kuchli — narx taxminan {p}% ehtimol bilan yuqoriga ko'tariladi.",
   aiWinBear:"Oxirgi {k} ta yirik harakat ({range}) bo'yicha {actors} {coin} dan jami {usd} pulini chiqarib olyapti (sotuv bosimi {sh}%). Sotuv bosimi kuchli — narx taxminan {p}% ehtimol bilan pastga tushadi.",
   aiFlat:"{coin} bo'yicha oxirgi {k} ta harakatda xarid va sotuv deyarli teng (xarid {b}%, sotuv {s}%). Aniq yo'nalish yo'q — narx taxminan {p}% ehtimol bilan yon harakatda qoladi.",
   netWin:"So'nggi harakatlar sof oqimi", radarName:"Kit radari (Blockscout)",
+  collapse:"Yig'ish / ochish", liveHint:"Yangi tranzaksiyalar shu yerda jonli ko'rinadi…",
   footer:"Ma'lumot manbalari: mempool.space, eth.blockscout.com, OKX, Binance, CoinGecko — hammasi bepul va kalitsiz. Barcha yozuvlar brauzeringizda saqlanadi."
 },
 ru:{
   tagline:"Терминал аналитики институциональных и Smart Money криптопотоков",
   addWallet:"+ Добавить кошелёк", older:"Загрузить старую историю",
-  panelInst:"ИНСТИТУЦИОНАЛЬНЫЕ КИТЫ", panelInstSub:"Движения гигантов: BlackRock, Grayscale и другие",
+  panelInst:"ИНСТИТУЦИОНАЛЬНЫЕ КИТЫ", panelInstSub:"Движения гигантов ($1M–$50M): BlackRock, Grayscale и другие",
   panelSmc:"SMART MONEY КИТЫ (SMC)", panelSmcSub:"Радар массовых покупок и продаж на $1M–$50M",
   colCompany:"Компания", colWho:"Кит / Кошелёк", colCoin:"Крипто", colAction:"Действие", colAmount:"Сумма (USD)", colDate:"Дата и время", colProof:"Proof",
   buy:"КУПИЛ", sell:"ПРОДАЛ", bought:"Всего куплено", sold:"Всего продано", net:"Чистый денежный поток",
@@ -309,18 +334,19 @@ ru:{
   added:"Кошелёк добавлен", olderDone:"Старые записи загружены", olderNone:"Старых записей больше нет",
   noSpeech:"Браузер не поддерживает озвучивание.", voiceFallback:"Узбекский голос не найден, использован близкий тюркский.", noVoice:"Узбекский голос не найден — используется голос по умолчанию.",
   search:"Поиск: компания, адрес, Tx, крипто…", sAll:"Все действия", dBuy:"Доля покупок", dSell:"Доля продаж", pillAll:"Все", pillCoin:"Крипто", pillCo:"Компания", verified:"Проверено",
-  cluBuy:"МАССОВАЯ ПОКУПКА", cluSell:"МАССОВАЯ ПРОДАЖА", cluInfo:"{k} китов · {usd} · за последние {h} ч", cluNone:"Пока нет однонаправленных действий 3 и более китов.", shown:"{a} / {b} записей",
-  stLive:"● Блокчейн подключён (live)", stConn:"● Подключение к блокчейну…", stErr:"● Нет связи с блокчейном — повторная попытка",
+  cluBuy:"МАССОВАЯ ПОКУПКА", cluSell:"МАССОВАЯ ПРОДАЖА", cluInfo:"{k} китов · {usd} · за последние {h} ч", shown:"{a} / {b} записей",
+  stLive:"Блокчейн подключён (live)", stConn:"Подключение к блокчейну…", stErr:"Нет связи с блокчейном — повторная попытка",
   aiWinBull:"По последним {k} крупным операциям ({range}) {actors} направляют в {coin} в общей сложности {usd} (доля покупок {sh}%). Спрос сильный — цена вырастет с вероятностью около {p}%.",
   aiWinBear:"По последним {k} крупным операциям ({range}) {actors} выводят из {coin} в общей сложности {usd} (давление продавцов {sh}%). Давление продавцов сильное — цена снизится с вероятностью около {p}%.",
   aiFlat:"По {coin} в последних {k} операциях покупки и продажи почти равны (покупки {b}%, продажи {s}%). Чёткого направления нет — цена останется в боковике с вероятностью около {p}%.",
   netWin:"Чистый поток последних операций", radarName:"Радар китов (Blockscout)",
+  collapse:"Свернуть / развернуть", liveHint:"Новые транзакции появятся здесь в реальном времени…",
   footer:"Источники данных: mempool.space, eth.blockscout.com, OKX, CoinGecko — всё бесплатно и без ключей. Все записи хранятся в вашем браузере."
 },
 en:{
   tagline:"Institutional & Smart Money crypto analytics terminal",
   addWallet:"+ Add wallet", older:"Load older history",
-  panelInst:"INSTITUTIONAL WHALES", panelInstSub:"Giants' movements: BlackRock, Grayscale and more",
+  panelInst:"INSTITUTIONAL WHALES", panelInstSub:"Giants' moves ($1M–$50M): BlackRock, Grayscale and more",
   panelSmc:"SMART MONEY WHALES (SMC)", panelSmcSub:"Mass buy/sell radar for $1M–$50M trades",
   colCompany:"Company", colWho:"Whale / Wallet", colCoin:"Crypto", colAction:"Action", colAmount:"Amount (USD)", colDate:"Date & time", colProof:"Proof",
   buy:"BOUGHT", sell:"SOLD", bought:"Total bought", sold:"Total sold", net:"Net cash flow",
@@ -341,12 +367,13 @@ en:{
   added:"Wallet added", olderDone:"Older records loaded", olderNone:"No older records left to load",
   noSpeech:"Your browser does not support speech synthesis.", voiceFallback:"No Uzbek voice found; a related Turkic voice is used.", noVoice:"No Uzbek voice found — using the default voice.",
   search:"Search: company, address, Tx, coin…", sAll:"All actions", dBuy:"Buy share", dSell:"Sell share", pillAll:"All", pillCoin:"Crypto", pillCo:"Company", verified:"Verified",
-  cluBuy:"MASS BUY", cluSell:"MASS SELL", cluInfo:"{k} whales · {usd} · last {h}h", cluNone:"No cluster of 3+ whales in the same direction yet.", shown:"{a} / {b} records",
-  stLive:"● Live blockchain connected", stConn:"● Connecting to blockchain…", stErr:"● Blockchain unreachable — retrying",
+  cluBuy:"MASS BUY", cluSell:"MASS SELL", cluInfo:"{k} whales · {usd} · last {h}h", shown:"{a} / {b} records",
+  stLive:"Live blockchain connected", stConn:"Connecting to blockchain…", stErr:"Blockchain unreachable — retrying",
   aiWinBull:"Across the latest {k} large moves ({range}), {actors} have put {usd} in total into {coin} (buy share {sh}%). Demand is strong — price is likely to rise, with roughly {p}% probability.",
   aiWinBear:"Across the latest {k} large moves ({range}), {actors} have withdrawn {usd} in total from {coin} (selling pressure {sh}%). Selling pressure is strong — price is likely to fall, with roughly {p}% probability.",
   aiFlat:"For {coin}, buying and selling are almost even across the last {k} moves (buy {b}%, sell {s}%). No clear direction — price likely stays range-bound, roughly {p}% probability.",
   netWin:"Net flow of latest moves", radarName:"Whale radar (Blockscout)",
+  collapse:"Collapse / expand", liveHint:"New transactions appear here live…",
   footer:"Data sources: mempool.space, eth.blockscout.com, OKX, CoinGecko — all free and keyless. All records are stored in your browser."
 }};
 let lang=LS.get('aa.lang','uz'); if(!I[lang]) lang='uz';
@@ -377,8 +404,8 @@ const S={
   wallets:loadWallets(),
   meta:LS.get('alimovaura_meta_v3',{}),
   txs:new Map(), prices:LS.get('aa.prices',{}), hist:{}, histP:{}, fresh:new Map(), attempted:new Set(), radarTried:false, radar:{ok:0,err:null,last:0},
-  busy:false, lastCycle:0, loaded:false, firstDone:false, speaking:null, aiText:{inst:'',smc:''},
-  view:{inst:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'},smc:{limit:100,period:'all',open:false,side:'all',q:''}}
+  busy:false, lastCycle:0, loaded:false, firstDone:false, speaking:null, aiText:{inst:'',smc:''}, aiOpen:LS.get('aa.aiOpen',true),
+  view:{inst:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'},smc:{limit:100,period:'all',open:false,side:'all',q:'',co:'all',coin:'all'}}
 };
 const PANELS={
   inst:{types:['inst'],key:'panelInst',sub:'panelInstSub',who:'colCompany'},
@@ -475,7 +502,7 @@ function renderTicker(){
     const p=S.prices[c.s];
     if(!p) return `<div class="tk">${coinIcon(c.s)}<span class="sym">${c.s}</span><span class="px">…</span></div>`;
     const up=p.ch>=0;
-    return `<div class="tk">${coinIcon(c.s)}<span class="sym">${c.s}</span><span class="px">$${fmtPrice(p.p)}</span><span class="ch ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(p.ch).toFixed(2)}%</span></div>`;
+    return `<div class="tk">${coinIcon(c.s)}<span class="sym">${c.s}</span><span class="px">$${fmtPrice(p.p)}</span><span class="badge ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(p.ch).toFixed(2)}%</span></div>`;
   }).join('');
 }
 
@@ -649,7 +676,7 @@ async function fetchEth(w,mode){
   if(fails===kinds.length) throw res.err||new Error('fetch failed');
   return res;
 }
-const passIngest=(w,r)=>SMC_ALLOW.has(r.sym)&&(w.type==='inst'?r.usd>=CFG.MIN_INST:(r.usd>=CFG.SMC_MIN&&r.usd<=CFG.SMC_MAX));
+const passIngest=(w,r)=>SMC_ALLOW.has(r.sym)&&r.usd>=CFG.SMC_MIN&&r.usd<=CFG.SMC_MAX;
 async function syncWallet(w,mode){
   const m=meta(w.id);
   await Promise.all([loadHist('BTC'),loadHist('ETH')]);
@@ -878,11 +905,11 @@ function windowSignals(list){
   });
 }
 function analyze(list){
-  const real=list.filter(x=>AI_ALLOW.has(x.sym)).map(x=>({...x,sym:ALIAS[x.sym]||x.sym}));
+  const real=list.filter(x=>AI_ALLOW.has(x.sym)&&x.usd>=CFG.SMC_MIN&&x.usd<=CFG.SMC_MAX).map(x=>({...x,sym:ALIAS[x.sym]||x.sym}));
   const st=streakSignals(real), used=new Set(st.slice(0,2).map(s=>s.sym));
   const ws=windowSignals(real);
   const rest=ws.filter(s=>!used.has(s.sym)).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net));
-  return {signals:[...st.slice(0,2),...rest].slice(0,4),
+  return {signals:[...st.slice(0,2),...rest].slice(0,3),
     chips:ws.map(c=>({sym:c.sym,net:c.net})).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)).slice(0,5)};
 }
 function actorsText(sg){
@@ -913,8 +940,7 @@ function visible(panel){
       x.who=x.lab||shortAddr(x.cp); x.via=x.via0||''; x.pk=panel; x.co='SMC'; x.verified=false; out.push(x); continue;
     }
     const w=byId.get(x.w); if(!w||!w.addr||norm(w.addr)!==x.a||!P.types.includes(w.type)) continue;
-    if(panel==='inst'){ if(x.usd<CFG.MIN_INST) continue; }
-    else if(x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue;
+    if(x.usd<CFG.SMC_MIN||x.usd>CFG.SMC_MAX) continue;      /* strict $1M-$50M on both tables */
     x.who=whoOf(x); x.via=w.type==='exch'?w.label:''; x.pk=panel; x.co=baseName(w.label); x.verified=!!(w.builtin&&!w.slot&&!w.unv);
     out.push(x);
   }
@@ -938,55 +964,63 @@ function sigText(s){
   return t(s.dir==='bull'?'aiBull':'aiBear',{n:s.n,actors:actorsText(s),coin:s.sym,usd:usd(s.total),p:s.p,s:s.s});
 }
 function renderAI(a,b){
-  const an=analyze([...a,...b]), lines=[]; let body='';
+  const an=analyze([...a,...b]), lines=[]; let items='';
+  const rdy=ready('inst')&&ready('smc');
   if(!an.signals.length){
-    const txt=(ready('inst')&&ready('smc'))?t('aiNone'):t('loading');
-    body=`<div class="none">${esc(txt)}</div>`; if(ready('inst')&&ready('smc')) lines.push(txt);
-  }else body='<ul>'+an.signals.map(s=>{
+    const txt=rdy?t('aiNone'):t('loading');
+    items=`<div class="none">${esc(txt)}</div>`; if(rdy) lines.push(txt);
+  }else items='<ul>'+an.signals.map(s=>{
     const txt=sigText(s); lines.push(txt);
     return `<li class="${s.dir}"><div>${esc(txt)}</div><div class="bar"><i style="width:${s.p}%"></i></div></li>`;
   }).join('')+'</ul>';
-  if(an.chips.length) body+=`<div class="chips"><span class="chip" style="border:0;padding-left:0">${esc(t('netWin'))}:</span>`+an.chips.map(c=>`<span class="chip ${c.net>=0?'up':'down'}">${esc(c.sym)} ${usdSigned(c.net)}</span>`).join('')+'</div>';
-  body+=`<div class="disc">${esc(t('disc'))}</div>`;
+  const chips=an.chips.length?`<div class="chips"><span class="lbl">${esc(t('netWin'))}:</span>`+an.chips.map(c=>`<span class="cb ${c.net>=0?'up':'down'}">${coinIcon(c.sym)}${esc(c.sym)} ${usdCS(c.net)}</span>`).join('')+'</div>':'';
   S.aiText.ai=lines.join(' ');
-  $('#ai').innerHTML=`<div class="aih"><b>${esc(t('aiTitle'))}</b><button class="btn" data-act="speak" data-k="ai" ${lines.length?'':'disabled'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg><span class="vl">${esc(t('listen'))}</span></button></div>${body}`;
+  const el=$('#ai'); el.className='ai'+(S.aiOpen?'':' closed');
+  el.innerHTML=`<div class="aih"><b>${esc(t('aiTitle'))}</b><span class="info" title="${esc(t('disc'))}">ⓘ</span><span class="sp"></span>
+<button class="btn sm" data-act="speak" data-k="ai" ${lines.length?'':'disabled'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg><span class="vl">${esc(t('listen'))}</span></button>
+<button class="btn sm ico" data-act="aitoggle" title="${esc(t('collapse'))}" aria-label="${esc(t('collapse'))}" aria-expanded="${S.aiOpen}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button></div>
+<div class="aib">${items}${chips}</div><div class="ais">${esc(lines[0]||'')}</div>`;
 }
 const VERIFIED='<svg class="vb" viewBox="0 0 24 24"><title>Verified</title><path fill="#D4AF37" d="M12 2l2.4 1.8 3-.1 1 2.8 2.5 1.7-.9 2.9.9 2.9-2.5 1.7-1 2.8-3-.1L12 22l-2.4-1.8-3 .1-1-2.8-2.5-1.7.9-2.9-.9-2.9 2.5-1.7 1-2.8 3 .1z"/><path d="M8.5 12.3l2.4 2.4 4.6-4.9" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function renderPanel(k,vis){
   const v=S.view[k]; let rows=vis.period;
   if(v.side!=='all') rows=rows.filter(x=>x.side===v.side);
-  if(k==='inst'){
-    if(v.co!=='all') rows=rows.filter(x=>x.co===v.co);
-    if(v.coin!=='all') rows=rows.filter(x=>x.sym===v.coin);
-  }
+  if(k==='inst'&&v.co!=='all') rows=rows.filter(x=>x.co===v.co);
+  if(v.coin!=='all') rows=rows.filter(x=>(ALIAS[x.sym]||x.sym)===v.coin);
   const q=(v.q||'').trim().toLowerCase();
   if(q) rows=rows.filter(x=>[x.who,x.via,x.sym,x.hash,x.cp,x.co,fmtDate(x.ts)].join(' ').toLowerCase().includes(q));
-  /* inst extras */
+  /* quick filter pills (same markup on both panels) */
+  const pill=(kind,val,label,on)=>`<button class="pl ${on?'on':''}" data-act="pill" data-k="${k}" data-kind="${kind}" data-v="${esc(val)}">${esc(label)}</button>`;
+  let ph='';
   if(k==='inst'){
     const cos=[...new Set(S.wallets.filter(w=>w.type==='inst').map(w=>baseName(w.label)))];
-    const pill=(kind,val,label,on)=>`<button class="pl ${on?'on':''}" data-act="pill" data-kind="${kind}" data-v="${esc(val)}">${esc(label)}</button>`;
-    $('#inst-pills').innerHTML=`<span class="lb">${esc(t('pillCo'))}</span>`+pill('co','all',t('pillAll'),v.co==='all')+cos.map(c=>pill('co',c,c,v.co===c)).join('')
-      +`<span class="lb" style="margin-left:8px">${esc(t('pillCoin'))}</span>`+pill('coin','all',t('pillAll'),v.coin==='all')+['BTC','ETH','SOL'].map(c=>pill('coin',c,c,v.coin===c)).join('');
-    let b=0,s=0; for(const x of rows){ if(x.side==='buy')b+=x.usd; else s+=x.usd; }
-    const n=b-s, bp=(b+s)?Math.round(b/(b+s)*100):50;
-    $('#inst-flow').innerHTML=`<div><small>${esc(t('bought'))}</small><b class="up">${usd(b)}</b></div><div><small>${esc(t('sold'))}</small><b class="down">${usd(s)}</b></div><div><small>${esc(t('net'))}</small><b class="${n>=0?'up':'down'}">${usdSigned(n)}</b></div>`;
-    $('#inst-bal').innerHTML=`<div class="bal">${(b+s)?`<i class="g" style="width:${bp}%"></i><i class="r" style="width:${100-bp}%"></i>`:''}</div><div class="bl"><span class="up">${esc(t('dBuy'))} ${(b+s)?bp:0}%</span><span class="down">${esc(t('dSell'))} ${(b+s)?100-bp:0}%</span></div>`;
-  }else{
-    const cl=clusters(vis.all);
-    $('#smc-clu').innerHTML=cl.length?cl.map(e=>`<div class="clb ${e.side}">${e.side==='buy'?'🔥 '+esc(t('cluBuy')):'⚠️ '+esc(t('cluSell'))}: ${esc(e.sym)}<small>${esc(t('cluInfo',{k:e.w.size,usd:usd(e.usd),h:CLUSTER_H}))}</small></div>`).join(''):`<div class="clnone">${esc(t('cluNone'))}</div>`;
+    ph+=`<span class="lb">${esc(t('pillCo'))}</span>`+pill('co','all',t('pillAll'),v.co==='all')+cos.map(c=>pill('co',c,c,v.co===c)).join('');
   }
-  /* table with infinite scroll */
+  ph+=`<span class="lb"${k==='inst'?' style="margin-left:8px"':''}>${esc(t('pillCoin'))}</span>`+pill('coin','all',t('pillAll'),v.coin==='all')+['BTC','ETH','SOL','LINK','UNI'].map(c=>pill('coin',c,c,v.coin===c)).join('');
+  $(`#${k}-pills`).innerHTML=ph;
+  /* flow strip + dominance bar */
+  let b=0,s=0; for(const x of rows){ if(x.side==='buy')b+=x.usd; else s+=x.usd; }
+  const n=b-s, tot=b+s, bp=tot?Math.round(b/tot*100):50;
+  $(`#${k}-flow`).innerHTML=`<div><small>${esc(t('bought'))}</small><b class="up">${usd(b)}</b></div><div><small>${esc(t('sold'))}</small><b class="down">${usd(s)}</b></div><div><small>${esc(t('net'))}</small><b class="${n>=0?'up':'down'}">${usdSigned(n)}</b></div>`;
+  $(`#${k}-bal`).innerHTML=`<div class="bal">${tot?`<i class="g" style="width:${bp}%"></i><i class="r" style="width:${100-bp}%"></i>`:''}</div><div class="bl"><span class="up">${esc(t('dBuy'))} ${tot?bp:0}%</span><span class="down">${esc(t('dSell'))} ${tot?100-bp:0}%</span></div>`;
+  /* mass buy/sell clusters: only rendered when a real cluster exists */
+  if(k==='smc'){
+    const cl=clusters(vis.all), el=$('#smc-clu');
+    el.style.display=cl.length?'':'none';
+    el.innerHTML=cl.map(e=>`<div class="clb ${e.side}">${e.side==='buy'?'🔥 '+esc(t('cluBuy')):'⚠️ '+esc(t('cluSell'))}: ${esc(e.sym)}<small>${esc(t('cluInfo',{k:e.w.size,usd:usd(e.usd),h:CLUSTER_H}))}</small></div>`).join('');
+  }
+  /* table with infinite scroll; empty message ONLY when the filtered list is really empty */
   const now=Date.now();
   for(const [id,at] of S.fresh) if(now-at>60000) S.fresh.delete(id);
   v.hasMore=rows.length>v.limit;
   const shown=rows.slice(0,v.limit);
   $(`#${k}-cnt`).textContent=t('shown',{a:shown.length,b:rows.length});
   if(!shown.length){
-    $(`#${k}-tw`).style.display='none'; $(`#${k}-empty`).style.display='block';
+    $(`#${k}-tw`).style.display='none'; $(`#${k}-empty`).style.display='flex';
     $(`#${k}-empty`).textContent=ready(k)?t('empty'):t('loading');
   }else{
     $(`#${k}-tw`).style.display=''; $(`#${k}-empty`).style.display='none';
-    $(`#${k}-body`).innerHTML=shown.map(x=>{
+    let html=shown.map(x=>{
       const buy=x.side==='buy';
       const sub=x.via?`<span class="sub">${esc(t('via',{x:x.via}))}</span>`:'';
       return `<tr class="${S.fresh.has(x.id)?'flash':''}"><td><b>${esc(x.who)}</b>${x.verified&&k==='inst'?VERIFIED:''}${sub}</td>
@@ -994,8 +1028,10 @@ function renderPanel(k,vis){
 <td><span class="pill ${buy?'buy':'sell'}">${esc(t(buy?'buy':'sell'))}</span></td>
 <td class="num ${buy?'up':'down'}"${x.est?` title="${esc(t('est'))}"`:''}>${usd(x.usd)}</td>
 <td>${fmtDate(x.ts)}</td>
-<td><a href="${mkUrl(x.chain,esc(x.hash))}" target="_blank" rel="noopener noreferrer">Tx ↗</a></td></tr>`;
+<td><a class="txb" href="${mkUrl(x.chain,esc(x.hash))}" target="_blank" rel="noopener noreferrer">Tx ↗</a></td></tr>`;
     }).join('');
+    if(shown.length<8) html+=`<tr class="liverow"><td colspan="6">${esc(t('liveHint'))}</td></tr>`;
+    $(`#${k}-body`).innerHTML=html;
   }
   const more=$(`#${k}-more`); more.style.display=v.hasMore?'':'none'; more.textContent=`${t('more')} (${rows.length-v.limit})`;
   renderWallets(k);
@@ -1021,12 +1057,12 @@ function buildShell(){
     return `<section class="panel" id="panel-${k}">
 <div class="ph"><div><h2 data-i18n="${P.key}"></h2><p data-i18n="${P.sub}"></p></div>
 <select class="sel" style="margin-left:auto" id="${k}-period" data-f="period" data-k="${k}"><option value="all" data-i18n="pAll"></option><option value="24h" data-i18n="p24"></option><option value="7d" data-i18n="p7"></option><option value="30d" data-i18n="p30"></option></select></div>
-${k==='inst'?'<div class="pills" id="inst-pills"></div><div class="flow" id="inst-flow"></div><div class="balwrap" id="inst-bal"></div>':'<div class="clu" id="smc-clu"></div>'}
+<div class="ins"><div class="pills" id="${k}-pills"></div><div class="flow" id="${k}-flow"></div><div class="balwrap" id="${k}-bal"></div>${k==='smc'?'<div class="clu" id="smc-clu" style="display:none"></div>':''}</div>
 <div class="tb"><input type="search" data-f="q" data-k="${k}" data-i18n-ph="search"><select class="sel" data-f="side" data-k="${k}"><option value="all" data-i18n="sAll"></option><option value="buy" data-i18n="buy"></option><option value="sell" data-i18n="sell"></option></select><span class="cnt" id="${k}-cnt"></span></div>
-<div class="tw" id="${k}-tw"><table><thead><tr><th data-i18n="${P.who}"></th><th data-i18n="colCoin"></th><th data-i18n="colAction"></th><th class="num" data-i18n="colAmount"></th><th data-i18n="colDate"></th><th data-i18n="colProof"></th></tr></thead><tbody id="${k}-body"></tbody></table></div>
-<div class="empty" id="${k}-empty"></div>
-<button class="btn more" id="${k}-more" data-act="more" data-k="${k}"></button>
-<details class="wl" id="${k}-wl"></details></section>`;
+<div class="tbody"><div class="tw" id="${k}-tw"><table><thead><tr><th data-i18n="${P.who}"></th><th data-i18n="colCoin"></th><th data-i18n="colAction"></th><th class="num" data-i18n="colAmount"></th><th data-i18n="colDate"></th><th data-i18n="colProof"></th></tr></thead><tbody id="${k}-body"></tbody></table></div>
+<div class="empty" id="${k}-empty"></div></div>
+<div class="foot"><button class="btn more" id="${k}-more" data-act="more" data-k="${k}"></button>
+<details class="wl" id="${k}-wl"></details></div></section>`;
   }).join('');
   $$('.wl').forEach(d=>d.addEventListener('toggle',()=>{S.view[d.id.slice(0,d.id.indexOf('-'))].open=d.open}));
   $$('[data-f]').forEach(el=>el.addEventListener(el.tagName==='INPUT'?'input':'change',()=>{
@@ -1127,7 +1163,8 @@ document.addEventListener('click',e=>{
   const act=b.dataset.act, k=b.dataset.k, id=b.dataset.id;
   if(act==='speak') speak(k);
   else if(act==='more'){S.view[k].limit+=100;render()}
-  else if(act==='pill'){const v=S.view.inst;v[b.dataset.kind==='co'?'co':'coin']=b.dataset.v;v.limit=100;render()}
+  else if(act==='pill'){const v=S.view[k];v[b.dataset.kind]=b.dataset.v;v.limit=100;render()}
+  else if(act==='aitoggle'){S.aiOpen=!S.aiOpen;LS.set('aa.aiOpen',S.aiOpen);render()}
   else if(act==='setaddr') openModal(S.wallets.find(w=>w.id===id));
   else if(act==='rm'){
     const w=S.wallets.find(x=>x.id===id); if(!w) return;
